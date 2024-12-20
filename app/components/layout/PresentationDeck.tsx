@@ -4,7 +4,7 @@ import { ArrowRight, ArrowLeft, CircleCheck, Command, Database, Search, ChevronU
 const PresentationDeck = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [expandedApp, setExpandedApp] = useState(null);
+  const [expandedApp, setExpandedApp] = useState<string | null>(null);
 
   // Apps data structure
   const apps = [
@@ -145,7 +145,7 @@ const PresentationDeck = () => {
                 >
                   <div 
                     className="p-6 cursor-pointer"
-                    onClick={() => setExpandedApp(expandedApp === app.id ? null : app.id)}
+                    onClick={() => setExpandedApp((current) => current === app.id ? null : app.id)}
                   >
                     <div className="flex items-start gap-4">
                       <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${app.color} p-0.5 flex-shrink-0`}>
