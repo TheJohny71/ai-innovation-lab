@@ -1,4 +1,3 @@
-// src/app/page.tsx
 'use client';
 import { useState, useEffect } from 'react';
 import SlideLayout from './components/layout/SlideLayout';
@@ -7,12 +6,13 @@ import ExpandingCard from './components/cards/ExpandingCard';
 import AnimatedStats from './components/layout/AnimatedStats';
 import CallToAction from './components/layout/CallToAction';
 import Loading from './components/ui/loading';
+import { Database, Search, BarChart } from 'lucide-react';
 
 const solutions = [
   {
     title: "Data Analysis",
     description: "Advanced analytics and insights for legal professionals",
-    icon: "database" as const,
+    icon: Database,
     features: [
       "Real-time data processing",
       "Custom report generation",
@@ -23,7 +23,7 @@ const solutions = [
   {
     title: "Smart Search",
     description: "AI-powered document search and retrieval",
-    icon: "search" as const,
+    icon: Search,
     features: [
       "Natural language processing",
       "Context-aware search",
@@ -34,7 +34,7 @@ const solutions = [
   {
     title: "Analytics Platform",
     description: "Comprehensive legal data visualization",
-    icon: "database" as const,
+    icon: BarChart,
     features: [
       "Interactive dashboards",
       "Custom metrics tracking",
@@ -46,6 +46,7 @@ const solutions = [
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [currentSection, setCurrentSection] = useState(0);
 
   useEffect(() => {
     // Simulate loading time
@@ -60,30 +61,37 @@ export default function Home() {
     return <Loading />;
   }
 
+  const handleSectionChange = (index: number) => {
+    setCurrentSection(index);
+  };
+
   return (
-    <SlideLayout>
+    <SlideLayout onSectionChange={handleSectionChange}>
       {/* Hero Section */}
-      <section className="flex items-center justify-center p-8 min-h-full">
+      <section className="flex items-center justify-center p-8 min-h-screen bg-gradient-to-br from-blue-900/20 to-purple-900/20">
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-teal-400 mb-6">
+          <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-teal-400 mb-8 animate-fade-in">
             AI Innovation Lab
           </h1>
-          <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+          <p className="text-2xl text-gray-300 mb-12 max-w-3xl mx-auto animate-fade-in-delay">
             Next-generation legal technology solutions powered by artificial intelligence
           </p>
         </div>
       </section>
 
       {/* Solutions Overview - Cascading Cards */}
-      <section className="flex items-center justify-center p-8 min-h-full">
+      <section className="flex items-center justify-center p-8 min-h-screen bg-gradient-to-br from-purple-900/10 to-blue-900/10">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h2 className="text-4xl font-bold text-white mb-12 text-center">
+            Our Solutions
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {solutions.map((solution, index) => (
               <CascadingCard 
                 key={index}
                 title={solution.title}
                 description={solution.description}
-                icon={solution.icon}
+                Icon={solution.icon}
               />
             ))}
           </div>
@@ -91,19 +99,19 @@ export default function Home() {
       </section>
 
       {/* Detailed Features - Expanding Cards */}
-      <section className="flex items-center justify-center p-8 min-h-full">
+      <section className="flex items-center justify-center p-8 min-h-screen bg-gradient-to-br from-blue-900/10 to-purple-900/10">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">
+          <h2 className="text-4xl font-bold text-white mb-12 text-center">
             Explore Our Solutions
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {solutions.map((solution, index) => (
               <ExpandingCard 
                 key={index}
                 title={solution.title}
                 description={solution.description}
                 features={solution.features}
-                icon={solution.icon}
+                Icon={solution.icon}
               />
             ))}
           </div>
@@ -111,9 +119,9 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="flex items-center justify-center p-8 min-h-full bg-gradient-to-br from-purple-900/10 to-teal-900/10">
+      <section className="flex items-center justify-center p-8 min-h-screen bg-gradient-to-br from-purple-900/10 to-teal-900/10">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-white mb-12 text-center">
+          <h2 className="text-4xl font-bold text-white mb-12 text-center">
             Impact & Performance
           </h2>
           <AnimatedStats />
@@ -121,7 +129,7 @@ export default function Home() {
       </section>
 
       {/* Call to Action Section */}
-      <section className="flex items-center justify-center p-8 min-h-full">
+      <section className="flex items-center justify-center p-8 min-h-screen bg-gradient-to-br from-blue-900 to-purple-900">
         <CallToAction />
       </section>
     </SlideLayout>

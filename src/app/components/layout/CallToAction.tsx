@@ -1,40 +1,21 @@
-// src/app/components/layout/CallToAction.tsx
-'use client';
 import React from 'react';
-import { useScrollAnimation } from '../../hooks/useScrollAnimation';
-import { Search } from 'lucide-react';
+import ContactForm from './ContactForm';
 
-export default function CallToAction() {
-  const { elementRef, isVisible } = useScrollAnimation();
-
+const CallToAction = () => {
   return (
-    <div 
-      ref={elementRef}
-      className={`w-full max-w-4xl mx-auto bg-gradient-to-br from-purple-900/20 to-teal-900/20 
-                  rounded-2xl p-8 transition-all duration-1000 transform
-                  ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-    >
-      <div className="text-center mb-8">
-        <h3 className="text-3xl font-bold text-white mb-4">
-          Ready to Transform Your Legal Practice?
-        </h3>
-        <p className="text-gray-300 max-w-2xl mx-auto">
-          Join leading law firms already benefiting from our AI-powered solutions. 
-          Schedule a demo to see how we can enhance your practice.
+    <section className="min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-br from-blue-900 via-purple-900 to-blue-900">
+      <div className="max-w-4xl w-full mx-auto text-center mb-12">
+        <h2 className="text-4xl font-bold mb-4 text-white">
+          Ready to Transform Your Business?
+        </h2>
+        <p className="text-xl text-gray-300 mb-8">
+          Get in touch with us to schedule a personalized demo and discover how our AI solutions can drive innovation in your organization.
         </p>
       </div>
-
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <button className="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg 
-                         transition-colors duration-200 flex items-center gap-2">
-          <Search className="w-5 h-5" />
-          Schedule Demo
-        </button>
-        <button className="px-6 py-3 border border-purple-500/50 hover:bg-purple-500/10 
-                         text-white rounded-lg transition-colors duration-200">
-          Learn More
-        </button>
-      </div>
-    </div>
+      
+      <ContactForm />
+    </section>
   );
-}
+};
+
+export default CallToAction;
