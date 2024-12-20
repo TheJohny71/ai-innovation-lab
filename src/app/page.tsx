@@ -8,7 +8,14 @@ import CallToAction from './components/layout/CallToAction';
 import Loading from './components/ui/loading';
 import { Database, Search, BarChart } from 'lucide-react';
 
-const solutions = [
+interface Solution {
+  title: string;
+  description: string;
+  icon: any; // Using any for Lucide icons
+  features: string[];
+}
+
+const solutions: Solution[] = [
   {
     title: "Data Analysis",
     description: "Advanced analytics and insights for legal professionals",
@@ -49,7 +56,6 @@ export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
 
   useEffect(() => {
-    // Simulate loading time
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1500);

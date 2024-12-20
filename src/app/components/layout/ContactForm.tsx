@@ -1,20 +1,33 @@
+'use client';
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+interface FormData {
+  name: string;
+  email: string;
+  company: string;
+  message: string;
+}
+
+interface FormStatus {
+  type: string;
+  message: string;
+}
+
 const ContactForm = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     company: '',
     message: ''
   });
   
-  const [status, setStatus] = useState({
+  const [status, setStatus] = useState<FormStatus>({
     type: '',
     message: ''
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -22,13 +35,11 @@ const ContactForm = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus({ type: 'loading', message: 'Sending...' });
     
-    // Simulate form submission
     try {
-      // Here you would typically make an API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       setStatus({
         type: 'success',
@@ -44,14 +55,14 @@ const ContactForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-lg mx-auto">
+    <Card className="w-full max-w-lg mx-auto bg-white/5 backdrop-blur-sm">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center">Request a Demo</CardTitle>
+        <CardTitle className="text-2xl font-bold text-center text-white">Request a Demo</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="name" className="block text-sm font-medium">
+            <label htmlFor="name" className="block text-sm font-medium text-white">
               Name
             </label>
             <input
@@ -61,12 +72,12 @@ const ContactForm = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full p-2 border rounded-md bg-white/5 backdrop-blur-sm"
+              className="w-full p-2 border rounded-md bg-white/10 text-white border-white/20"
             />
           </div>
           
           <div className="space-y-2">
-            <label htmlFor="email" className="block text-sm font-medium">
+            <label htmlFor="email" className="block text-sm font-medium text-white">
               Email
             </label>
             <input
@@ -76,12 +87,12 @@ const ContactForm = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full p-2 border rounded-md bg-white/5 backdrop-blur-sm"
+              className="w-full p-2 border rounded-md bg-white/10 text-white border-white/20"
             />
           </div>
           
           <div className="space-y-2">
-            <label htmlFor="company" className="block text-sm font-medium">
+            <label htmlFor="company" className="block text-sm font-medium text-white">
               Company
             </label>
             <input
@@ -90,12 +101,12 @@ const ContactForm = () => {
               name="company"
               value={formData.company}
               onChange={handleChange}
-              className="w-full p-2 border rounded-md bg-white/5 backdrop-blur-sm"
+              className="w-full p-2 border rounded-md bg-white/10 text-white border-white/20"
             />
           </div>
           
           <div className="space-y-2">
-            <label htmlFor="message" className="block text-sm font-medium">
+            <label htmlFor="message" className="block text-sm font-medium text-white">
               Message
             </label>
             <textarea
@@ -104,7 +115,7 @@ const ContactForm = () => {
               value={formData.message}
               onChange={handleChange}
               rows={4}
-              className="w-full p-2 border rounded-md bg-white/5 backdrop-blur-sm"
+              className="w-full p-2 border rounded-md bg-white/10 text-white border-white/20"
             />
           </div>
           
@@ -118,8 +129,8 @@ const ContactForm = () => {
           
           {status.message && (
             <div className={`text-center p-2 rounded ${
-              status.type === 'success' ? 'text-green-500' : 
-              status.type === 'error' ? 'text-red-500' : ''
+              status.type === 'success' ? 'text-green-400' : 
+              status.type === 'error' ? 'text-red-400' : 'text-white'
             }`}>
               {status.message}
             </div>
