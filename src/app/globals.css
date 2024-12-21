@@ -1,3 +1,4 @@
+# Open src/app/globals.css and make sure it contains:
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
