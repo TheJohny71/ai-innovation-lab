@@ -2,12 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-}
+@layer base {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
+  body {
+    color: var(--foreground);
+    background: var(--background);
+  }
 }
