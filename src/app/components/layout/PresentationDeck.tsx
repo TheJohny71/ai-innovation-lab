@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { ArrowRight, ArrowLeft, CircleCheck, Command, Database, Search, ChevronUp, ChevronDown } from 'lucide-react';
 
@@ -96,7 +98,6 @@ const PresentationDeck = () => {
         </div>
       )
     },
-    // Impact Slide
     {
       id: 'impact',
       title: 'Impact',
@@ -129,7 +130,6 @@ const PresentationDeck = () => {
         </div>
       )
     },
-    // App Details Slide
     {
       id: 'app-details',
       title: 'Apps',
@@ -199,7 +199,6 @@ const PresentationDeck = () => {
                 </div>
               ))}
 
-              {/* Future Apps Placeholder */}
               <div className="mt-8 p-8 border-2 border-dashed border-gray-700/30 rounded-xl text-center">
                 <h3 className="text-xl font-bold text-white mb-2">More Apps Coming Soon</h3>
                 <p className="text-gray-400">
@@ -214,7 +213,6 @@ const PresentationDeck = () => {
     }
   ];
 
-  // Navigation controls
   const navigationControls = (
     <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-8">
       <button
@@ -256,20 +254,17 @@ const PresentationDeck = () => {
 
   return (
     <div className="relative bg-gradient-to-b from-gray-950 to-gray-900 overflow-hidden">
-      {/* Gradient Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 bg-purple-500/30 -top-1/4 -left-1/4" />
         <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 bg-teal-500/30 -bottom-1/4 -right-1/4" />
       </div>
 
-      {/* Main Content */}
       <div className={`transition-all duration-500 ${
         isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
       }`}>
         {slides[currentSlide].component()}
       </div>
 
-      {/* Navigation */}
       {navigationControls}
     </div>
   );
