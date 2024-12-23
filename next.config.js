@@ -3,9 +3,7 @@ const nextConfig = {
   output: 'export',
   basePath: '/ai-innovation-lab',
   assetPrefix: '/ai-innovation-lab/',
-  images: {
-    unoptimized: true
-  }
-}
+  trailingSlash: true,
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
