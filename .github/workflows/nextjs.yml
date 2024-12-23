@@ -18,28 +18,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout repository
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Setup Node.js environment
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      # Step 3: Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      # Step 4: Build the project with `next build` and `next export`
-      - name: Build with Next.js
-        run: |
-          npm run build
-          npx next export
+      - name: Build Next.js site
+        run: npm run build
 
-      # Step 5: Upload the `out/` directory as an artifact for deployment
-      - name: Upload artifact
+      - name: Upload artifact to Pages
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
@@ -51,7 +44,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      # Step 6: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
