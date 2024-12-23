@@ -1,114 +1,101 @@
 'use client';
 
-// [Previous code remains the same until the app details section]
-// Adding the missing part:
+import React, { useState, useMemo } from 'react';
+import { ChevronLeft, ChevronRight, Shield, Zap, Lightbulb } from 'lucide-react';
+import ParticleCanvas from '../ui/ParticleCanvas'; // Ensure this file exists in the specified path
 
-                          <div>
-                            <h4 className="text-lg font-semibold text-white mb-4">Performance</h4>
-                            <div className="space-y-4">
-                              {Object.entries(app.metrics).map(([key, value]) => (
-                                <div key={key} className="flex justify-between items-center">
-                                  <span className="text-gray-400">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                                  <span className="text-teal-400 font-bold">{value}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-    }
+const PresentationDeck = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const slides = [
+    { id: 1, title: 'Welcome', content: 'Welcome to the AI Innovation Lab' },
+    { id: 2, title: 'Solutions', content: 'Explore our solutions.' },
+    { id: 3, title: 'Impact', content: 'See the impact of our AI initiatives.' },
+    { id: 4, title: 'Apps', content: 'Check out our innovative apps.' },
   ];
 
+  const cards = useMemo(() => [
+    { title: 'Enhanced Client Service', icon: Shield },
+    { title: 'Accelerated Workflows', icon: Zap },
+    { title: 'Practice Innovation', icon: Lightbulb },
+  ], []);
+
+  const handlePageChange = (newIndex: number) => {
+    if (isTransitioning || newIndex === currentSlide) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentSlide(newIndex);
+      setIsTransitioning(false);
+    }, 150);
+  };
+  
+
   return (
-    <div className="relative bg-slate-900 overflow-hidden">
+    <div className="relative bg-slate-900 overflow-hidden min-h-screen">
+      {/* Particle Background */}
       <ParticleCanvas />
-      
+
       {/* Gradient Orbs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-10 bg-purple-500/30 -top-48 -left-48" />
         <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-10 bg-emerald-500/30 -bottom-48 -right-48" />
       </div>
 
-      <div className={`transition-all duration-500 ${
-        isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-      }`}>
-        {slides[currentSlide].component()}
+      {/* Main Content */}
+      <div
+        className={`transition-opacity duration-500 ${
+          isTransitioning ? 'opacity-0' : 'opacity-100'
+        }`}
+      >
+        <h1 className="text-5xl font-bold text-white text-center mt-12 mb-6">
+          {slides[currentSlide].title}
+        </h1>
+        <p className="text-xl text-slate-300 text-center mb-16">
+          {slides[currentSlide].content}
+        </p>
+        <div className="grid grid-cols-3 gap-8 px-16">
+          {cards.map((card, index) => (
+            <div
+              key={index}
+              className="group relative bg-slate-800 p-6 rounded-lg hover:border-emerald-500 transition"
+            >
+              <card.icon className="w-8 h-8 text-emerald-400 mb-4" />
+              <h3 className="text-white">{card.title}</h3>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-8">
+      <nav className="absolute bottom-4 w-full flex justify-center">
         <button
-          onClick={() => {
-            if (currentSlide > 0) {
-              setIsTransitioning(true);
-              setTimeout(() => {
-                setCurrentSlide(prev => prev - 1);
-                setIsTransitioning(false);
-              }, 150);
-            }
-          }}
+          onClick={() => handlePageChange(currentSlide - 1)}
           disabled={currentSlide === 0}
           className="p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
         >
           <ChevronLeft className={`w-5 h-5 ${
-            currentSlide === 0
-              ? 'text-gray-600' 
-              : 'text-gray-400 hover:text-gray-300'
+            currentSlide === 0 ? 'text-gray-600' : 'text-gray-400 hover:text-gray-300'
           }`} />
         </button>
-
-        <div className="flex items-center gap-4">
-          {slides.map((slide, index) => (
+        <div className="flex gap-2">
+          {slides.map((_, index) => (
             <button
-              key={slide.id}
-              onClick={() => {
-                if (currentSlide !== index) {
-                  setIsTransitioning(true);
-                  setTimeout(() => {
-                    setCurrentSlide(index);
-                    setIsTransitioning(false);
-                  }, 150);
-                }
-              }}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
-                currentSlide === index 
-                  ? 'bg-emerald-500 text-white'
-                  : 'text-gray-600 hover:text-gray-400'
+              key={index}
+              onClick={() => handlePageChange(index)}
+              className={`w-3 h-3 rounded-full ${
+                index === currentSlide ? 'bg-emerald-500' : 'bg-gray-600 hover:bg-gray-400'
               }`}
-            >
-              {currentSlide !== index && (
-                <div className="w-2 h-2 rounded-full bg-gray-600 mr-2" />
-              )}
-              {slide.title}
-            </button>
+            />
           ))}
         </div>
-
         <button
-          onClick={() => {
-            if (currentSlide < slides.length - 1) {
-              setIsTransitioning(true);
-              setTimeout(() => {
-                setCurrentSlide(prev => prev + 1);
-                setIsTransitioning(false);
-              }, 150);
-            }
-          }}
+          onClick={() => handlePageChange(currentSlide + 1)}
           disabled={currentSlide === slides.length - 1}
           className="p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
         >
           <ChevronRight className={`w-5 h-5 ${
-            currentSlide === slides.length - 1
-              ? 'text-gray-600' 
-              : 'text-gray-400 hover:text-gray-300'
+            currentSlide === slides.length - 1 ? 'text-gray-600' : 'text-gray-400 hover:text-gray-300'
           }`} />
         </button>
       </nav>
