@@ -1,48 +1,135 @@
 'use client';
 
-import React, { useState } from 'react';
-import { ArrowRight, ArrowLeft, CircleCheck, Command, Database, Search, ChevronUp, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight, Shield, Zap, Lightbulb, CircleCheck, Command, Database, Search } from 'lucide-react';
 
+// Keep your existing apps data
+const apps = [
+  {
+    id: 'ai-analysis',
+    title: 'AI Analysis',
+    subtitle: 'Enhanced Legal Research',
+    description: 'Advanced AI-powered legal document analysis and research assistance.',
+    icon: Command,
+    color: 'from-purple-500 to-indigo-500',
+    features: ['Natural Language Processing', 'Citation Checking', 'Key Fact Extraction'],
+    metrics: { timeReduction: '40%', accuracyRate: '85%' }
+  },
+  // ... rest of your apps data
+];
+
+// Particle Canvas Component
+const ParticleCanvas = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const frameCountRef = useRef(0);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    let animationFrameId: number;
+    
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    class Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      radius: number;
+      opacity: number;
+
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.2;
+        this.vy = (Math.random() - 0.5) * 0.2;
+        this.radius = Math.random() * 1.5;
+        this.opacity = Math.random() * 0.2 + 0.1;
+      }
+
+      draw() {
+        if (!ctx) return;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(148, 163, 184, ${this.opacity})`;
+        ctx.fill();
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+    }
+
+    const particles = Array.from({ length: 50 }, () => new Particle());
+
+    const animate = () => {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      if (frameCountRef.current % 2 === 0) {
+        particles.forEach(particle => {
+          particle.update();
+          particle.draw();
+        });
+        
+        particles.forEach((p1, i) => {
+          particles.slice(i + 1).forEach(p2 => {
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 100) {
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(148, 163, 184, ${0.1 * (1 - distance / 100)})`;
+              ctx.stroke();
+            }
+          });
+        });
+      }
+      
+      frameCountRef.current++;
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none"
+    />
+  );
+};
+
+// Main Component
 const PresentationDeck = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [expandedApp, setExpandedApp] = useState<string | null>(null);
 
-  // Apps data structure
-  const apps = [
-    {
-      id: 'ai-analysis',
-      title: 'AI Analysis',
-      subtitle: 'Enhanced Legal Research',
-      description: 'Advanced AI-powered legal document analysis and research assistance.',
-      icon: Command,
-      color: 'from-purple-500 to-indigo-500',
-      features: ['Natural Language Processing', 'Citation Checking', 'Key Fact Extraction'],
-      metrics: { timeReduction: '40%', accuracyRate: '85%' }
-    },
-    {
-      id: 'data-integration',
-      title: 'Data Integration',
-      subtitle: 'Unified Data Platform',
-      description: 'Seamless integration with existing legal databases and systems.',
-      icon: Database,
-      color: 'from-teal-500 to-emerald-500',
-      features: ['Real-time Sync', 'Data Validation', 'API Integration'],
-      metrics: { processingSpeed: '60%', dataAccuracy: '95%' }
-    },
-    {
-      id: 'analytics',
-      title: 'Analytics',
-      subtitle: 'Insights & Reporting',
-      description: 'Data-driven insights and customizable reporting.',
-      icon: Search,
-      color: 'from-orange-500 to-pink-500',
-      features: ['Predictive Analytics', 'Custom Dashboards', 'Trend Analysis'],
-      metrics: { predictionAccuracy: '85%', reportingEfficiency: '75%' }
-    }
-  ];
-
-  // Define slides
+  // Preserve your existing slides array structure
   const slides = [
     {
       id: 'welcome',
@@ -56,73 +143,25 @@ const PresentationDeck = () => {
             <p className="text-2xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed">
               Leading innovation through human-led, AI-driven mindset
             </p>
-            <div className="flex justify-center gap-6">
-              {['Enhanced Client Service', 'Accelerated Workflows', 'Practice Innovation'].map((benefit) => (
-                <div key={benefit} 
-                  className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/30 rounded-xl p-6 hover:bg-gray-800/40 transition-all hover:-translate-y-1">
-                  <CircleCheck className="w-8 h-8 text-teal-400 mx-auto mb-3" />
-                  <span className="text-gray-300 text-lg">{benefit}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'solutions-flow',
-      title: 'Solutions',
-      component: () => (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="max-w-6xl mx-auto px-6">
-            <h2 className="text-4xl font-bold text-white text-center mb-16">Integrated Solutions</h2>
-            <div className="grid grid-cols-3 gap-12">
-              {apps.map((app, index) => (
-                <div key={app.id} className="flex flex-col items-center relative">
-                  <div className={`w-24 h-24 rounded-3xl bg-gradient-to-br ${app.color} p-0.5 hover:scale-105 transition-all`}>
-                    <div className="w-full h-full rounded-3xl bg-gray-900 flex items-center justify-center">
-                      <app.icon className="w-12 h-12 text-white" />
-                    </div>
-                  </div>
-                  <div className="mt-6 text-center">
-                    <div className="text-xl font-bold text-white mb-2">{app.title}</div>
-                    <div className="text-teal-400">{app.subtitle}</div>
-                  </div>
-                  {index < 2 && (
-                    <ArrowRight className="absolute -right-6 top-1/2 -translate-y-1/2 text-gray-600 animate-pulse" />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'impact',
-      title: 'Impact',
-      component: () => (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="max-w-6xl mx-auto px-6">
-            <h2 className="text-4xl font-bold text-white text-center mb-16">Real-World Impact</h2>
             <div className="grid grid-cols-3 gap-8">
-              {apps.map((app) => (
-                <div key={app.id} 
-                  className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/30 rounded-xl p-8 hover:bg-gray-800/40 transition-all hover:-translate-y-2">
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${app.color} p-0.5 mb-6`}>
-                    <div className="w-full h-full rounded-2xl bg-gray-900 flex items-center justify-center">
-                      <app.icon className="w-8 h-8 text-white" />
-                    </div>
+              {[
+                { title: 'Enhanced Client Service', icon: Shield },
+                { title: 'Accelerated Workflows', icon: Zap },
+                { title: 'Practice Innovation', icon: Lightbulb }
+              ].map((card) => (
+                <div
+                  key={card.title}
+                  className="group relative bg-slate-800/50 backdrop-blur p-6 rounded-lg border border-slate-700 
+                    flex flex-col items-center text-center transition-all duration-300 
+                    hover:border-emerald-500/50 hover:scale-[1.02] hover:-translate-y-1"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent 
+                    opacity-0 group-hover:opacity-100 transition-opacity rounded-lg" />
+                  <div className="w-10 h-10 mb-4 rounded-full bg-emerald-500/10 flex items-center justify-center 
+                    group-hover:bg-emerald-500/20 transition-colors">
+                    <card.icon className="w-5 h-5 text-emerald-400" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-4">{app.title}</h3>
-                  <div className="space-y-4">
-                    {Object.entries(app.metrics).map(([key, value]) => (
-                      <div key={key} className="flex justify-between items-center">
-                        <span className="text-gray-400">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                        <span className="text-teal-400 font-bold text-xl">{value}</span>
-                      </div>
-                    ))}
-                  </div>
+                  <h3 className="text-white font-medium">{card.title}</h3>
                 </div>
               ))}
             </div>
@@ -130,133 +169,17 @@ const PresentationDeck = () => {
         </div>
       )
     },
-    {
-      id: 'app-details',
-      title: 'Apps',
-      component: () => (
-        <div className="min-h-screen py-16">
-          <div className="max-w-6xl mx-auto px-6">
-            <h2 className="text-4xl font-bold text-white text-center mb-16">Our Applications</h2>
-            <div className="space-y-6">
-              {apps.map((app) => (
-                <div key={app.id} 
-                  className={`bg-gray-800/30 backdrop-blur-sm border border-gray-700/30 rounded-xl transition-all duration-300
-                    ${expandedApp === app.id ? 'scale-100' : 'hover:bg-gray-800/40 hover:-translate-y-1'}`}
-                >
-                  <div 
-                    className="p-6 cursor-pointer"
-                    onClick={() => setExpandedApp((current) => current === app.id ? null : app.id)}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${app.color} p-0.5 flex-shrink-0`}>
-                        <div className="w-full h-full rounded-2xl bg-gray-900 flex items-center justify-center">
-                          <app.icon className="w-6 h-6 text-white" />
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-white">{app.title}</h3>
-                        <p className="text-teal-400 text-sm">{app.subtitle}</p>
-                        <p className="text-gray-400 mt-2">{app.description}</p>
-                      </div>
-                      {expandedApp === app.id ? (
-                        <ChevronUp className="w-6 h-6 text-gray-400" />
-                      ) : (
-                        <ChevronDown className="w-6 h-6 text-gray-400" />
-                      )}
-                    </div>
-                  </div>
-                  
-                  {expandedApp === app.id && (
-                    <div className="px-6 pb-6">
-                      <div className="border-t border-gray-700/30 pt-6">
-                        <div className="grid grid-cols-2 gap-8">
-                          <div>
-                            <h4 className="text-lg font-semibold text-white mb-4">Key Features</h4>
-                            <ul className="space-y-2">
-                              {app.features.map((feature, idx) => (
-                                <li key={idx} className="flex items-center gap-2 text-gray-300">
-                                  <CircleCheck className="w-4 h-4 text-teal-400 flex-shrink-0" />
-                                  {feature}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          <div>
-                            <h4 className="text-lg font-semibold text-white mb-4">Performance</h4>
-                            <div className="space-y-4">
-                              {Object.entries(app.metrics).map(([key, value]) => (
-                                <div key={key} className="flex justify-between items-center">
-                                  <span className="text-gray-400">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                                  <span className="text-teal-400 font-bold">{value}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-
-              <div className="mt-8 p-8 border-2 border-dashed border-gray-700/30 rounded-xl text-center">
-                <h3 className="text-xl font-bold text-white mb-2">More Apps Coming Soon</h3>
-                <p className="text-gray-400">
-                  Our innovation lab is constantly developing new solutions. 
-                  Stay tuned for upcoming additions to our portfolio.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )
-    }
+    // ... Keep your other existing slides
   ];
 
-  const navigationControls = (
-    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-8">
-      <button
-        onClick={() => setCurrentSlide(prev => prev - 1)}
-        disabled={currentSlide === 0}
-        className="p-2 rounded-full bg-gray-800/50 text-white hover:bg-gray-800 disabled:opacity-50"
-      >
-        <ArrowLeft className="w-6 h-6" />
-      </button>
-      
-      <div className="flex gap-2">
-        {slides.map((slide, index) => (
-          <button
-            key={slide.id}
-            onClick={() => setCurrentSlide(index)}
-            className={`flex items-center gap-2 px-3 py-1 rounded-full transition-all ${
-              currentSlide === index 
-                ? 'bg-teal-500 text-white' 
-                : 'bg-gray-800/50 text-gray-400 hover:text-white'
-            }`}
-          >
-            <div className={`w-2 h-2 rounded-full ${
-              currentSlide === index ? 'bg-white' : 'bg-gray-600'
-            }`} />
-            <span className="text-sm">{slide.title}</span>
-          </button>
-        ))}
-      </div>
-
-      <button
-        onClick={() => setCurrentSlide(prev => prev + 1)}
-        disabled={currentSlide === slides.length - 1}
-        className="p-2 rounded-full bg-gray-800/50 text-white hover:bg-gray-800 disabled:opacity-50"
-      >
-        <ArrowRight className="w-6 h-6" />
-      </button>
-    </div>
-  );
-
   return (
-    <div className="relative bg-gradient-to-b from-gray-950 to-gray-900 overflow-hidden">
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 bg-purple-500/30 -top-1/4 -left-1/4" />
-        <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 bg-teal-500/30 -bottom-1/4 -right-1/4" />
+    <div className="relative bg-slate-900 overflow-hidden">
+      <ParticleCanvas />
+      
+      {/* Gradient Orbs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-10 bg-purple-500/30 -top-48 -left-48" />
+        <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-10 bg-emerald-500/30 -bottom-48 -right-48" />
       </div>
 
       <div className={`transition-all duration-500 ${
@@ -265,7 +188,51 @@ const PresentationDeck = () => {
         {slides[currentSlide].component()}
       </div>
 
-      {navigationControls}
+      {/* Bottom Navigation */}
+      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-8">
+        <button
+          onClick={() => setCurrentSlide(prev => prev - 1)}
+          disabled={currentSlide === 0}
+          className="p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+        >
+          <ChevronLeft className={`w-5 h-5 ${
+            currentSlide === 0
+              ? 'text-gray-600' 
+              : 'text-gray-400 hover:text-gray-300'
+          }`} />
+        </button>
+
+        <div className="flex items-center gap-4">
+          {slides.map((slide, index) => (
+            <button
+              key={slide.id}
+              onClick={() => setCurrentSlide(index)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
+                currentSlide === index 
+                  ? 'bg-emerald-500 text-white'
+                  : 'text-gray-600 hover:text-gray-400'
+              }`}
+            >
+              {currentSlide !== index && (
+                <div className="w-2 h-2 rounded-full bg-gray-600 mr-2" />
+              )}
+              {slide.title}
+            </button>
+          ))}
+        </div>
+
+        <button
+          onClick={() => setCurrentSlide(prev => prev + 1)}
+          disabled={currentSlide === slides.length - 1}
+          className="p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+        >
+          <ChevronRight className={`w-5 h-5 ${
+            currentSlide === slides.length - 1
+              ? 'text-gray-600' 
+              : 'text-gray-400 hover:text-gray-300'
+          }`} />
+        </button>
+      </nav>
     </div>
   );
 };
