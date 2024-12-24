@@ -1,54 +1,93 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search, Database, LucideIcon } from 'lucide-react';
+import { ChevronUp, ChevronDown, CircleCheck, LucideIcon } from 'lucide-react';
 
 interface ExpandingCardProps {
+  id?: string;
   title: string;
+  subtitle?: string;
   description: string;
-  features: string[];
   icon: LucideIcon;
+  color?: string;
+  features?: string[];
+  metrics?: Record<string, string>;
 }
 
-const ExpandingCard = ({ 
-  title, 
-  description, 
-  features,
-  icon: Icon
+const ExpandingCard = ({
+  id,
+  title,
+  subtitle,
+  description,
+  icon: Icon,
+  color = 'text-purple-400',
+  features = [],
+  metrics = {}
 }: ExpandingCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <div 
-      className="group relative bg-gradient-to-br from-gray-800 to-gray-900 
-                rounded-xl border border-gray-700/50 transition-all duration-500
-                hover:scale-102"
-      onClick={() => setIsExpanded(!isExpanded)}
+      key={id} 
+      className="bg-slate-800/50 backdrop-blur border border-slate-700/50 rounded-lg transition-all duration-300 hover:border-emerald-500/50 hover:-translate-y-1"
     >
-      <div className="relative p-6">
-        <div className="flex items-start space-x-4">
-          <div className="p-2 bg-purple-500/10 rounded-lg">
-            <Icon className="w-6 h-6 text-purple-400" />
+      <div 
+        className="p-6 cursor-pointer"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <div className="flex items-start gap-4">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-0.5 flex-shrink-0">
+            <div className="w-full h-full rounded-2xl bg-slate-900 flex items-center justify-center">
+              <Icon className={`w-8 h-8 ${color}`} />
+            </div>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
-            <p className="text-gray-400">{description}</p>
+          <div className="flex-1">
+            <h3 className="text-xl font-bold text-white">{title}</h3>
+            {subtitle && <p className="text-emerald-400 text-sm">{subtitle}</p>}
+            <p className="text-slate-400 mt-2">{description}</p>
           </div>
-        </div>
-
-        <div className={`mt-4 overflow-hidden transition-all duration-500 
-                      ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-          <hr className="border-gray-700 mb-4" />
-          <ul className="space-y-2">
-            {features.map((feature, index) => (
-              <li key={index} className="flex items-center text-gray-300">
-                <div className="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2" />
-                {feature}
-              </li>
-            ))}
-          </ul>
+          {isExpanded ? (
+            <ChevronUp className="w-5 h-5 text-slate-400" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-slate-400" />
+          )}
         </div>
       </div>
+      
+      {isExpanded && (
+        <div className="px-6 pb-6">
+          <div className="border-t border-slate-700/50 pt-6">
+            <div className="grid grid-cols-2 gap-8">
+              {features.length > 0 && (
+                <div>
+                  <h4 className="text-lg font-semibold text-white mb-4">Key Features</h4>
+                  <ul className="space-y-2">
+                    {features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center gap-2 text-slate-300">
+                        <CircleCheck className={`w-4 h-4 flex-shrink-0 ${color}`} />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {Object.keys(metrics).length > 0 && (
+                <div>
+                  <h4 className="text-lg font-semibold text-white mb-4">Performance</h4>
+                  <div className="space-y-4">
+                    {Object.entries(metrics).map(([key, value]) => (
+                      <div key={key} className="flex justify-between items-center">
+                        <span className="text-slate-400">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                        <span className="text-emerald-400 font-bold">{value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
