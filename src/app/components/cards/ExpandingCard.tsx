@@ -12,6 +12,8 @@ interface ExpandingCardProps {
   color?: string;
   features?: string[];
   metrics?: Record<string, string>;
+  isExpanded?: boolean;
+  onToggle?: () => void;
 }
 
 const ExpandingCard = ({
@@ -22,9 +24,20 @@ const ExpandingCard = ({
   icon: Icon,
   color = 'text-purple-400',
   features = [],
-  metrics = {}
+  metrics = {},
+  isExpanded = false,
+  onToggle
 }: ExpandingCardProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [localExpanded, setLocalExpanded] = useState(false);
+  const expanded = onToggle ? isExpanded : localExpanded;
+  
+  const handleToggle = () => {
+    if (onToggle) {
+      onToggle();
+    } else {
+      setLocalExpanded(!localExpanded);
+    }
+  };
 
   return (
     <div 
@@ -33,7 +46,7 @@ const ExpandingCard = ({
     >
       <div 
         className="p-6 cursor-pointer"
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={handleToggle}
       >
         <div className="flex items-start gap-4">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-0.5 flex-shrink-0">
@@ -46,7 +59,7 @@ const ExpandingCard = ({
             {subtitle && <p className="text-emerald-400 text-sm">{subtitle}</p>}
             <p className="text-slate-400 mt-2">{description}</p>
           </div>
-          {isExpanded ? (
+          {expanded ? (
             <ChevronUp className="w-5 h-5 text-slate-400" />
           ) : (
             <ChevronDown className="w-5 h-5 text-slate-400" />
@@ -54,7 +67,7 @@ const ExpandingCard = ({
         </div>
       </div>
       
-      {isExpanded && (
+      {expanded && (
         <div className="px-6 pb-6">
           <div className="border-t border-slate-700/50 pt-6">
             <div className="grid grid-cols-2 gap-8">
