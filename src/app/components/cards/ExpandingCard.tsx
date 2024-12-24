@@ -11,7 +11,7 @@ interface ExpandingCardProps {
   icon: LucideIcon;
   color?: string;
   features?: string[];
-  metrics?: Record<string, string>;
+  metrics?: Record<string, string | undefined>; // Allow undefined values
   isExpanded?: boolean;
   onToggle?: () => void;
 }
@@ -30,7 +30,7 @@ const ExpandingCard = ({
 }: ExpandingCardProps) => {
   const [localExpanded, setLocalExpanded] = useState(false);
   const expanded = onToggle ? isExpanded : localExpanded;
-  
+
   const handleToggle = () => {
     if (onToggle) {
       onToggle();
@@ -40,19 +40,16 @@ const ExpandingCard = ({
   };
 
   return (
-    <div 
-      key={id} 
-      className="bg-slate-800/50 backdrop-blur border border-slate-700/50 rounded-lg 
-                 transition-all duration-300 hover:border-emerald-500/50 hover:-translate-y-1"
+    <div
+      key={id}
+      className="bg-slate-800/50 backdrop-blur border border-slate-700/50 rounded-lg transition-all duration-300 hover:border-emerald-500/50 hover:-translate-y-1"
     >
-      <div 
+      <div
         className="p-6 cursor-pointer"
         onClick={handleToggle}
       >
         <div className="flex items-start gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 
-                          to-emerald-700 p-0.5 flex-shrink-0"
-          >
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-0.5 flex-shrink-0">
             <div className="w-full h-full rounded-2xl bg-slate-900 flex items-center justify-center">
               <Icon className={`w-8 h-8 ${color}`} />
             </div>
@@ -69,7 +66,7 @@ const ExpandingCard = ({
           )}
         </div>
       </div>
-      
+
       {expanded && (
         <div className="px-6 pb-6">
           <div className="border-t border-slate-700/50 pt-6">
@@ -93,10 +90,8 @@ const ExpandingCard = ({
                   <div className="space-y-4">
                     {Object.entries(metrics).map(([key, value]) => (
                       <div key={key} className="flex justify-between items-center">
-                        <span className="text-slate-400">
-                          {key.replace(/([A-Z])/g, ' $1').trim()}
-                        </span>
-                        <span className="text-emerald-400 font-bold">{value}</span>
+                        <span className="text-slate-400">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                        <span className="text-emerald-400 font-bold">{value || 'N/A'}</span>
                       </div>
                     ))}
                   </div>
