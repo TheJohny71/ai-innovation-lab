@@ -1,104 +1,154 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, Shield, Zap, Lightbulb } from 'lucide-react';
-import ParticleCanvas from '../ui/ParticleCanvas'; // Ensure this file exists in the specified path
+import React, { useState, useCallback } from 'react';
+import { 
+  ChevronLeft, 
+  ChevronRight,
+  Shield,
+  Zap,
+  Lightbulb,
+  Command,
+  Database,
+  Search
+} from 'lucide-react@0.263.1';
+import ParticleCanvas from '../ui/ParticleCanvas';
+import AnimatedStats from './AnimatedStats';
+import ExpandingCard from '../cards/ExpandingCard';
+import CascadingCard from '../cards/CascadingCard';
+
+const PAGES = ['Welcome', 'Solutions', 'Impact', 'Apps'] as const;
+type Page = typeof PAGES[number];
 
 const PresentationDeck = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [activePage, setActivePage] = useState<Page>('Welcome');
+  const [expandedApp, setExpandedApp] = useState<string | null>(null);
 
-  const slides = [
-    { id: 1, title: 'Welcome', content: 'Welcome to the AI Innovation Lab' },
-    { id: 2, title: 'Solutions', content: 'Explore our solutions.' },
-    { id: 3, title: 'Impact', content: 'See the impact of our AI initiatives.' },
-    { id: 4, title: 'Apps', content: 'Check out our innovative apps.' },
-  ];
+  const handlePageChange = useCallback((page: Page) => {
+    setActivePage(page);
+    setExpandedApp(null);
+  }, []);
 
-  const cards = useMemo(() => [
-    { title: 'Enhanced Client Service', icon: Shield },
-    { title: 'Accelerated Workflows', icon: Zap },
-    { title: 'Practice Innovation', icon: Lightbulb },
-  ], []);
+  const WelcomePage = () => (
+    <div className="flex flex-col items-center justify-center px-8">
+      <h1 className="text-4xl font-bold text-white mb-8">
+        AI Innovation Lab
+      </h1>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
+        {[
+          { title: 'Enhanced Service', description: 'Elevating client experience through AI', icon: Shield },
+          { title: 'Fast Workflows', description: 'Accelerating legal processes', icon: Zap },
+          { title: 'Innovation', description: 'Leading-edge legal tech solutions', icon: Lightbulb }
+        ].map((card) => (
+          <CascadingCard
+            key={card.title}
+            title={card.title}
+            description={card.description}
+            Icon={card.icon}
+          />
+        ))}
+      </div>
+    </div>
+  );
 
-  const handlePageChange = (newIndex: number) => {
-    if (isTransitioning || newIndex === currentSlide) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentSlide(newIndex);
-      setIsTransitioning(false);
-    }, 150);
-  };
-  
+  const SolutionsPage = () => (
+    <div className="flex flex-col items-center px-8">
+      <h2 className="text-3xl font-bold text-white mb-8">Solutions</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
+        {[
+          {
+            title: 'AI Analysis',
+            description: 'Advanced document analysis',
+            features: ['Natural Language Processing', 'Citation Checking', 'Key Fact Extraction'],
+            icon: 'search'
+          },
+          {
+            title: 'Data Integration',
+            description: 'Seamless system integration',
+            features: ['Real-time Sync', 'Data Validation', 'API Integration'],
+            icon: 'database'
+          },
+          {
+            title: 'Analytics Platform',
+            description: 'Comprehensive insights',
+            features: ['Predictive Analytics', 'Custom Dashboards', 'Trend Analysis'],
+            icon: 'search'
+          }
+        ].map((solution) => (
+          <ExpandingCard
+            key={solution.title}
+            title={solution.title}
+            description={solution.description}
+            features={solution.features}
+            icon={solution.icon}
+          />
+        ))}
+      </div>
+    </div>
+  );
+
+  const ImpactPage = () => (
+    <div className="flex flex-col items-center px-8">
+      <h2 className="text-3xl font-bold text-white mb-8">Impact</h2>
+      <AnimatedStats />
+    </div>
+  );
+
+  const Navigation = () => (
+    <nav className="absolute bottom-4 w-full flex justify-center items-center gap-4">
+      <button 
+        onClick={() => {
+          const prevIndex = PAGES.indexOf(activePage) - 1;
+          if (prevIndex >= 0) handlePageChange(PAGES[prevIndex]);
+        }}
+        disabled={PAGES.indexOf(activePage) === 0}
+        className="p-2 text-gray-400 hover:text-gray-300 disabled:text-gray-600 transition-colors"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      
+      <div className="flex items-center gap-2">
+        {PAGES.map((page) => (
+          <button
+            key={page}
+            onClick={() => handlePageChange(page)}
+            className={`w-3 h-3 rounded-full transition-colors ${
+              activePage === page ? 'bg-green-500' : 'bg-gray-600 hover:bg-gray-400'
+            }`}
+          />
+        ))}
+      </div>
+      
+      <button 
+        onClick={() => {
+          const nextIndex = PAGES.indexOf(activePage) + 1;
+          if (nextIndex < PAGES.length) handlePageChange(PAGES[nextIndex]);
+        }}
+        disabled={PAGES.indexOf(activePage) === PAGES.length - 1}
+        className="p-2 text-gray-400 hover:text-gray-300 disabled:text-gray-600 transition-colors"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+    </nav>
+  );
 
   return (
-    <div className="relative bg-slate-900 overflow-hidden min-h-screen">
-      {/* Particle Background */}
+    <div className="relative min-h-screen bg-gray-900">
       <ParticleCanvas />
-
-      {/* Gradient Orbs */}
+      
+      {/* Gradient orbs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-10 bg-purple-500/30 -top-48 -left-48" />
-        <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-10 bg-emerald-500/30 -bottom-48 -right-48" />
+        <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-10 bg-green-500/30 -bottom-48 -right-48" />
       </div>
 
-      {/* Main Content */}
-      <div
-        className={`transition-opacity duration-500 ${
-          isTransitioning ? 'opacity-0' : 'opacity-100'
-        }`}
-      >
-        <h1 className="text-5xl font-bold text-white text-center mt-12 mb-6">
-          {slides[currentSlide].title}
-        </h1>
-        <p className="text-xl text-slate-300 text-center mb-16">
-          {slides[currentSlide].content}
-        </p>
-        <div className="grid grid-cols-3 gap-8 px-16">
-          {cards.map((card, index) => (
-            <div
-              key={index}
-              className="group relative bg-slate-800 p-6 rounded-lg hover:border-emerald-500 transition"
-            >
-              <card.icon className="w-8 h-8 text-emerald-400 mb-4" />
-              <h3 className="text-white">{card.title}</h3>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Bottom Navigation */}
-      <nav className="absolute bottom-4 w-full flex justify-center">
-        <button
-          onClick={() => handlePageChange(currentSlide - 1)}
-          disabled={currentSlide === 0}
-          className="p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-        >
-          <ChevronLeft className={`w-5 h-5 ${
-            currentSlide === 0 ? 'text-gray-600' : 'text-gray-400 hover:text-gray-300'
-          }`} />
-        </button>
-        <div className="flex gap-2">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => handlePageChange(index)}
-              className={`w-3 h-3 rounded-full ${
-                index === currentSlide ? 'bg-emerald-500' : 'bg-gray-600 hover:bg-gray-400'
-              }`}
-            />
-          ))}
-        </div>
-        <button
-          onClick={() => handlePageChange(currentSlide + 1)}
-          disabled={currentSlide === slides.length - 1}
-          className="p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-        >
-          <ChevronRight className={`w-5 h-5 ${
-            currentSlide === slides.length - 1 ? 'text-gray-600' : 'text-gray-400 hover:text-gray-300'
-          }`} />
-        </button>
-      </nav>
+      {/* Main content */}
+      <main className="relative z-10 p-8">
+        {activePage === 'Welcome' && <WelcomePage />}
+        {activePage === 'Solutions' && <SolutionsPage />}
+        {activePage === 'Impact' && <ImpactPage />}
+        <Navigation />
+      </main>
     </div>
   );
 };
