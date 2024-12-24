@@ -10,7 +10,7 @@ import {
   Command,
   Database,
   Search
-} from 'lucide-react@0.263.1';
+} from 'lucide-react';
 import ParticleCanvas from '../ui/ParticleCanvas';
 import AnimatedStats from './AnimatedStats';
 import ExpandingCard from '../cards/ExpandingCard';
