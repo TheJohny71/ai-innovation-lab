@@ -1,36 +1,29 @@
 // src/app/components/cards/ExpandingCard.tsx
 import React, { useState } from 'react';
-import { Search, Database } from 'lucide-react';
+import { Search, Database, LucideIcon } from 'lucide-react';
 
 interface ExpandingCardProps {
   title: string;
   description: string;
   features: string[];
-  icon?: 'database' | 'search';
+  icon: LucideIcon; // Changed from string to LucideIcon type
 }
 
 export default function ExpandingCard({ 
   title, 
   description, 
   features,
-  icon = 'database' 
+  icon: Icon  // Changed to use the icon as a component directly
 }: ExpandingCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const Icon = icon === 'database' ? Database : Search;
 
   return (
     <div 
-      className={`group relative bg-gradient-to-br from-gray-800 to-gray-900 
-                  rounded-xl border border-gray-700/50 transition-all duration-500
-                  ${isExpanded ? 'scale-105' : 'hover:scale-102'}`}
+      className="group relative bg-gradient-to-br from-gray-800 to-gray-900 
+                rounded-xl border border-gray-700/50 transition-all duration-500
+                hover:scale-102"
       onClick={() => setIsExpanded(!isExpanded)}
     >
-      {/* Background layers for depth */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <div className="absolute inset-0 translate-x-2 translate-y-2 bg-purple-500/5 rounded-xl" />
-      </div>
-
-      {/* Main content */}
       <div className="relative p-6">
         <div className="flex items-start space-x-4">
           <div className="p-2 bg-purple-500/10 rounded-lg">
@@ -42,9 +35,8 @@ export default function ExpandingCard({
           </div>
         </div>
 
-        {/* Expandable content */}
         <div className={`mt-4 overflow-hidden transition-all duration-500 
-                        ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                      ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
           <hr className="border-gray-700 mb-4" />
           <ul className="space-y-2">
             {features.map((feature, index) => (
