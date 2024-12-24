@@ -11,10 +11,10 @@ import {
   Database,
   Search
 } from 'lucide-react';
-import ParticleCanvas from '../ui/ParticleCanvas';
-import AnimatedStats from './AnimatedStats';
-import ExpandingCard from '../cards/ExpandingCard';
-import CascadingCard from '../cards/CascadingCard';
+import ParticleCanvas from '@/app/components/ui/ParticleCanvas';
+import AnimatedStats from '@/app/components/layout/AnimatedStats';
+import ExpandingCard from '@/app/components/cards/ExpandingCard';
+import CascadingCard from '@/app/components/cards/CascadingCard';
 
 const PAGES = ['Welcome', 'Solutions', 'Impact', 'Apps'] as const;
 type Page = typeof PAGES[number];
