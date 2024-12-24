@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   ChevronLeft, 
   ChevronRight,
@@ -15,6 +15,9 @@ import {
   ChevronDown
 } from 'lucide-react';
 import ParticleCanvas from '../ui/ParticleCanvas';
+import AnimatedStats from './AnimatedStats';
+import ExpandingCard from '../cards/ExpandingCard';
+import CascadingCard from '../cards/CascadingCard';
 
 const colorSchemes = {
   primary: 'from-purple-400 via-cyan-400 to-emerald-400',
@@ -61,7 +64,6 @@ const PresentationDeck = () => {
     }
   ];
 
-  // Navigation component and page rendering functions follow...
   const Navigation = () => (
     <div className="flex items-center gap-4">
       <button 
@@ -101,11 +103,116 @@ const PresentationDeck = () => {
     </div>
   );
 
-  // Rest of the component implementation...
+  const renderWelcome = () => (
+    <div className="flex-1 flex flex-col items-center justify-center px-16 relative z-10">
+      <h1 className={`text-5xl font-bold mb-16 bg-gradient-to-r ${colorSchemes.primary} text-transparent bg-clip-text`}>
+        AI Innovation Lab
+      </h1>
+      
+      <p className="text-xl text-slate-300 text-center mb-16">
+        Disrupting the legal industry through human-centered AI
+      </p>
+
+      <div className="relative w-full max-w-6xl">
+        <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
+        
+        <div className="grid grid-cols-3 gap-8">
+          {[
+            {
+              title: 'Enhanced Client Service',
+              description: 'Elevating client experience through AI',
+              icon: Shield,
+              color: 'text-purple-400'
+            },
+            {
+              title: 'Accelerated Workflows',
+              description: 'Streamlining legal processes with automation',
+              icon: Zap,
+              color: 'text-cyan-400'
+            },
+            {
+              title: 'Practice Innovation',
+              description: 'Leading-edge legal tech solutions',
+              icon: Lightbulb,
+              color: 'text-emerald-400'
+            }
+          ].map((card) => (
+            <CascadingCard
+              key={card.title}
+              title={card.title}
+              description={card.description}
+              Icon={card.icon}
+              color={card.color}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderSolutions = () => (
+    <div className="flex-1 flex flex-col px-16 relative z-10">
+      <div className="h-20 flex justify-center items-center">
+        <Navigation />
+      </div>
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <h2 className="text-4xl font-bold text-white mb-16">Integrated Solutions</h2>
+        <div className="grid grid-cols-3 gap-8 max-w-6xl">
+          {apps.map((app) => (
+            <ExpandingCard
+              key={app.id}
+              {...app}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderImpact = () => (
+    <div className="flex-1 flex flex-col px-16 relative z-10">
+      <div className="h-20 flex justify-center items-center">
+        <Navigation />
+      </div>
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <h2 className="text-4xl font-bold text-white mb-16">Real-World Impact</h2>
+        <AnimatedStats />
+      </div>
+    </div>
+  );
+
+  const renderApps = () => (
+    <div className="flex-1 flex flex-col px-16 relative z-10">
+      <div className="h-20 flex justify-center items-center">
+        <Navigation />
+      </div>
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <h2 className="text-4xl font-bold text-white mb-16">Our Applications</h2>
+        <div className="space-y-6 w-full max-w-6xl">
+          {apps.map((app) => (
+            <ExpandingCard
+              key={app.id}
+              {...app}
+              isExpanded={expandedApp === app.id}
+              onToggle={() => setExpandedApp(expandedApp === app.id ? null : app.id)}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-slate-900 text-white relative">
       <ParticleCanvas />
       
+      {/* Gradient orbs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-10 bg-purple-500/30 -top-48 -left-48" />
+        <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-10 bg-green-500/30 -bottom-48 -right-48" />
+      </div>
+
+      {/* Main content */}
       <div className="relative z-10">
         {activePage === 'Welcome' && renderWelcome()}
         {activePage === 'Solutions' && renderSolutions()}
