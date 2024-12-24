@@ -1,53 +1,156 @@
-// src/app/components/cards/ExpandingCard.tsx
-import React, { useState } from 'react';
-import { Search, Database, LucideIcon } from 'lucide-react';
+'use client';
 
-interface ExpandingCardProps {
-  title: string;
-  description: string;
-  features: string[];
-  icon: LucideIcon; // Changed from string to LucideIcon type
-}
+import React, { useState, useCallback } from 'react';
+import { 
+  ChevronLeft, 
+  ChevronRight,
+  Shield,
+  Zap,
+  Lightbulb,
+  Command,
+  Database,
+  Search
+} from 'lucide-react';
+import ParticleCanvas from '../ui/ParticleCanvas';
+import AnimatedStats from './AnimatedStats';
+import ExpandingCard from '../cards/ExpandingCard';
+import CascadingCard from '../cards/CascadingCard';
 
-export default function ExpandingCard({ 
-  title, 
-  description, 
-  features,
-  icon: Icon  // Changed to use the icon as a component directly
-}: ExpandingCardProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+const PAGES = ['Welcome', 'Solutions', 'Impact', 'Apps'] as const;
+type Page = typeof PAGES[number];
 
-  return (
-    <div 
-      className="group relative bg-gradient-to-br from-gray-800 to-gray-900 
-                rounded-xl border border-gray-700/50 transition-all duration-500
-                hover:scale-102"
-      onClick={() => setIsExpanded(!isExpanded)}
-    >
-      <div className="relative p-6">
-        <div className="flex items-start space-x-4">
-          <div className="p-2 bg-purple-500/10 rounded-lg">
-            <Icon className="w-6 h-6 text-purple-400" />
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
-            <p className="text-gray-400">{description}</p>
-          </div>
-        </div>
+const PresentationDeck = () => {
+  const [activePage, setActivePage] = useState<Page>('Welcome');
+  const [expandedApp, setExpandedApp] = useState<string | null>(null);
 
-        <div className={`mt-4 overflow-hidden transition-all duration-500 
-                      ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-          <hr className="border-gray-700 mb-4" />
-          <ul className="space-y-2">
-            {features.map((feature, index) => (
-              <li key={index} className="flex items-center text-gray-300">
-                <div className="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2" />
-                {feature}
-              </li>
-            ))}
-          </ul>
-        </div>
+  const handlePageChange = useCallback((page: Page) => {
+    setActivePage(page);
+    setExpandedApp(null);
+  }, []);
+
+  const WelcomePage = () => (
+    <div className="flex flex-col items-center justify-center px-8">
+      <h1 className="text-4xl font-bold text-white mb-8">
+        AI Innovation Lab
+      </h1>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
+        {[
+          { title: 'Enhanced Service', description: 'Elevating client experience through AI', icon: Shield },
+          { title: 'Fast Workflows', description: 'Accelerating legal processes', icon: Zap },
+          { title: 'Innovation', description: 'Leading-edge legal tech solutions', icon: Lightbulb }
+        ].map((card) => (
+          <CascadingCard
+            key={card.title}
+            title={card.title}
+            description={card.description}
+            Icon={card.icon}
+          />
+        ))}
       </div>
     </div>
   );
-}
+
+  const SolutionsPage = () => (
+    <div className="flex flex-col items-center px-8">
+      <h2 className="text-3xl font-bold text-white mb-8">Solutions</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
+        {[
+          {
+            title: 'AI Analysis',
+            description: 'Advanced document analysis',
+            features: ['Natural Language Processing', 'Citation Checking', 'Key Fact Extraction'],
+            icon: Search // Pass the icon component directly
+          },
+          {
+            title: 'Data Integration',
+            description: 'Seamless system integration',
+            features: ['Real-time Sync', 'Data Validation', 'API Integration'],
+            icon: Database
+          },
+          {
+            title: 'Analytics Platform',
+            description: 'Comprehensive insights',
+            features: ['Predictive Analytics', 'Custom Dashboards', 'Trend Analysis'],
+            icon: Search
+          }
+        ].map((solution) => (
+          <ExpandingCard
+            key={solution.title}
+            title={solution.title}
+            description={solution.description}
+            features={solution.features}
+            icon={solution.icon}
+          />
+        ))}
+      </div>
+    </div>
+  );
+
+  const ImpactPage = () => (
+    <div className="flex flex-col items-center px-8">
+      <h2 className="text-3xl font-bold text-white mb-8">Impact</h2>
+      <AnimatedStats />
+    </div>
+  );
+
+  const Navigation = () => (
+    <nav className="absolute bottom-4 w-full flex justify-center items-center gap-4">
+      <button 
+        onClick={() => {
+          const prevIndex = PAGES.indexOf(activePage) - 1;
+          if (prevIndex >= 0) handlePageChange(PAGES[prevIndex]);
+        }}
+        disabled={PAGES.indexOf(activePage) === 0}
+        className="p-2 text-gray-400 hover:text-gray-300 disabled:text-gray-600 transition-colors"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      
+      <div className="flex items-center gap-2">
+        {PAGES.map((page) => (
+          <button
+            key={page}
+            onClick={() => handlePageChange(page)}
+            className={`w-3 h-3 rounded-full transition-colors ${
+              activePage === page ? 'bg-green-500' : 'bg-gray-600 hover:bg-gray-400'
+            }`}
+          />
+        ))}
+      </div>
+      
+      <button 
+        onClick={() => {
+          const nextIndex = PAGES.indexOf(activePage) + 1;
+          if (nextIndex < PAGES.length) handlePageChange(PAGES[nextIndex]);
+        }}
+        disabled={PAGES.indexOf(activePage) === PAGES.length - 1}
+        className="p-2 text-gray-400 hover:text-gray-300 disabled:text-gray-600 transition-colors"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+    </nav>
+  );
+
+  return (
+    <div className="relative min-h-screen bg-gray-900">
+      <ParticleCanvas />
+      
+      {/* Gradient orbs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-10 bg-purple-500/30 -top-48 -left-48" />
+        <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-10 bg-green-500/30 -bottom-48 -right-48" />
+      </div>
+
+      {/* Main content */}
+      <main className="relative z-10 p-8">
+        {activePage === 'Welcome' && <WelcomePage />}
+        {activePage === 'Solutions' && <SolutionsPage />}
+        {activePage === 'Impact' && <ImpactPage />}
+        <Navigation />
+      </main>
+    </div>
+  );
+};
+
+export default PresentationDeck;
