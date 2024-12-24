@@ -11,10 +11,10 @@ import {
   Database,
   Search
 } from 'lucide-react';
-import ParticleCanvas from '@/app/components/ui/ParticleCanvas';
-import AnimatedStats from '@/app/components/layout/AnimatedStats';
-import ExpandingCard from '@/app/components/cards/ExpandingCard';
-import CascadingCard from '@/app/components/cards/CascadingCard';
+import ParticleCanvas from '../ui/ParticleCanvas';
+import AnimatedStats from './AnimatedStats';
+import ExpandingCard from '../cards/ExpandingCard';
+import CascadingCard from '../cards/CascadingCard';
 
 const PAGES = ['Welcome', 'Solutions', 'Impact', 'Apps'] as const;
 type Page = typeof PAGES[number];
@@ -22,11 +22,17 @@ type Page = typeof PAGES[number];
 const PresentationDeck = () => {
   const [activePage, setActivePage] = useState<Page>('Welcome');
   const [expandedApp, setExpandedApp] = useState<string | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handlePageChange = useCallback((page: Page) => {
-    setActivePage(page);
-    setExpandedApp(null);
-  }, []);
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setActivePage(page);
+      setExpandedApp(null);
+      setIsTransitioning(false);
+    }, 150);
+  }, [isTransitioning]);
 
   const WelcomePage = () => (
     <div className="flex flex-col items-center justify-center px-8">
@@ -60,19 +66,19 @@ const PresentationDeck = () => {
             title: 'AI Analysis',
             description: 'Advanced document analysis',
             features: ['Natural Language Processing', 'Citation Checking', 'Key Fact Extraction'],
-            icon: 'search'
+            icon: Search
           },
           {
             title: 'Data Integration',
             description: 'Seamless system integration',
             features: ['Real-time Sync', 'Data Validation', 'API Integration'],
-            icon: 'database'
+            icon: Database
           },
           {
             title: 'Analytics Platform',
             description: 'Comprehensive insights',
             features: ['Predictive Analytics', 'Custom Dashboards', 'Trend Analysis'],
-            icon: 'search'
+            icon: Command
           }
         ].map((solution) => (
           <ExpandingCard
@@ -143,7 +149,11 @@ const PresentationDeck = () => {
       </div>
 
       {/* Main content */}
-      <main className="relative z-10 p-8">
+      <main 
+        className={`relative z-10 p-8 transition-opacity duration-300 ${
+          isTransitioning ? 'opacity-0' : 'opacity-100'
+        }`}
+      >
         {activePage === 'Welcome' && <WelcomePage />}
         {activePage === 'Solutions' && <SolutionsPage />}
         {activePage === 'Impact' && <ImpactPage />}
