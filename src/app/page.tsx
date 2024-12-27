@@ -1,6 +1,6 @@
 'use client';
-import PresentationDeck from './components/layout/PresentationDeck';
+import WelcomePage from './components/layout/WelcomePage';
 
 export default function Home() {
-  return <PresentationDeck />;
+  return <WelcomePage />;
 }
