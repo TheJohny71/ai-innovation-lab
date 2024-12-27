@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, ReactElement } from 'react';
 import { 
   Shield, 
   Zap, 
@@ -123,7 +123,7 @@ const PresentationDeck = () => {
       </button>
     </div>
   );
-  const PageComponents: Record<PageName, JSX.Element> = {
+   const PageComponents: Record<PageName, ReactElement> = {
     Welcome: (
       <div className="flex-1 flex flex-col items-center justify-center px-16 relative z-10">
         <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-cyan-400 to-emerald-400 text-transparent bg-clip-text">
