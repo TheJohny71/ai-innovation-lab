@@ -19,7 +19,6 @@ import ParticleCanvas from '../ui/ParticleCanvas';
 import AnimatedStats from './AnimatedStats';
 import CascadingCard from '../cards/CascadingCard';
 import ExpandingCard from '../cards/ExpandingCard';
-import ImpactDashboard from './ImpactDashboard';
 
 // Apps data
 const apps = [
