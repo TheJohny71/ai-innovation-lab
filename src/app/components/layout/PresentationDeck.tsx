@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState } from 'react';
 import { 
   Shield, 
@@ -53,9 +52,57 @@ const apps = [
     metrics: { predictionAccuracy: '85%', reportingEfficiency: '75%' }
   }
 ];
-const PresentationDeck = () => {
-  type PageName = 'Welcome' | 'Solutions' | 'Impact' | 'Apps';
-  
+
+type PageName = 'Welcome' | 'Solutions' | 'Impact' | 'Apps';
+
+const Navigation = ({ 
+  activePage, 
+  pages, 
+  handlePrevPage, 
+  handleNextPage, 
+  setActivePage 
+}: {
+  activePage: PageName;
+  pages: PageName[];
+  handlePrevPage: () => void;
+  handleNextPage: () => void;
+  setActivePage: (page: PageName) => void;
+}) => (
+<div className="flex items-center gap-4">
+    <button 
+      onClick={handlePrevPage} 
+      disabled={pages.indexOf(activePage) === 0} 
+      className="p-2 text-slate-500 hover:text-slate-400 transition-colors disabled:opacity-50"
+    >
+      <ChevronLeft className="w-5 h-5" />
+    </button>
+    <div className="flex items-center gap-2">
+      {pages.map((page) => (
+        <button 
+          key={page} 
+          onClick={() => setActivePage(page)} 
+          className={`flex items-center gap-2 px-4 py-1.5 rounded-full transition-colors ${
+            activePage === page ? 'bg-emerald-500 text-white' : 'text-slate-400'
+          }`}
+        >
+          <div className={`w-2 h-2 rounded-full ${
+            activePage === page ? 'hidden' : 'bg-slate-500'
+          }`} />
+          {page}
+        </button>
+      ))}
+    </div>
+    <button 
+      onClick={handleNextPage} 
+      disabled={pages.indexOf(activePage) === pages.length - 1} 
+      className="p-2 text-slate-500 hover:text-slate-400 transition-colors disabled:opacity-50"
+    >
+      <ChevronRight className="w-5 h-5" />
+    </button>
+  </div>
+);
+
+export default function PresentationDeck(): JSX.Element {
   const [activePage, setActivePage] = useState<PageName>('Welcome');
   const pages: PageName[] = ['Welcome', 'Solutions', 'Impact', 'Apps'];
   const [metrics] = useState({
@@ -89,40 +136,7 @@ const PresentationDeck = () => {
       setActivePage(pages[currentIndex - 1]);
     }
   };
-  const Navigation = () => (
-    <div className="flex items-center gap-4">
-      <button 
-        onClick={handlePrevPage} 
-        disabled={pages.indexOf(activePage) === 0} 
-        className="p-2 text-slate-500 hover:text-slate-400 transition-colors disabled:opacity-50"
-      >
-        <ChevronLeft className="w-5 h-5" />
-      </button>
-      <div className="flex items-center gap-2">
-        {pages.map((page) => (
-          <button 
-            key={page} 
-            onClick={() => setActivePage(page)} 
-            className={`flex items-center gap-2 px-4 py-1.5 rounded-full transition-colors ${
-              activePage === page ? 'bg-emerald-500 text-white' : 'text-slate-400'
-            }`}
-          >
-            <div className={`w-2 h-2 rounded-full ${
-              activePage === page ? 'hidden' : 'bg-slate-500'
-            }`} />
-            {page}
-          </button>
-        ))}
-      </div>
-      <button 
-        onClick={handleNextPage} 
-        disabled={pages.indexOf(activePage) === pages.length - 1} 
-        className="p-2 text-slate-500 hover:text-slate-400 transition-colors disabled:opacity-50"
-      >
-        <ChevronRight className="w-5 h-5" />
-      </button>
-    </div>
-  );
+
   const PageComponents: Record<PageName, JSX.Element> = {
     Welcome: (
       <div className="flex-1 flex flex-col items-center justify-center px-16 relative z-10">
@@ -158,7 +172,13 @@ const PresentationDeck = () => {
     Solutions: (
       <div className="flex-1 flex flex-col px-16 relative z-10">
         <div className="h-20 flex justify-center items-center">
-          <Navigation />
+          <Navigation 
+            activePage={activePage}
+            pages={pages}
+            handlePrevPage={handlePrevPage}
+            handleNextPage={handleNextPage}
+            setActivePage={setActivePage}
+          />
         </div>
         <div className="flex-1 flex flex-col items-center justify-center">
           <h2 className="text-4xl font-bold text-white mb-16">Integrated Solutions</h2>
@@ -186,7 +206,13 @@ const PresentationDeck = () => {
     Impact: (
       <div className="flex-1 flex flex-col px-16 relative z-10">
         <div className="h-20 flex justify-center items-center">
-          <Navigation />
+          <Navigation 
+            activePage={activePage}
+            pages={pages}
+            handlePrevPage={handlePrevPage}
+            handleNextPage={handleNextPage}
+            setActivePage={setActivePage}
+          />
         </div>
         
         {/* Main Content Container */}
@@ -287,9 +313,8 @@ const PresentationDeck = () => {
                 ))}
               </div>
             </div>
-
-            {/* Deployment Status */}
-            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-lg p-6 
+   {/* Deployment Status */}
+   <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-lg p-6 
                           transition-all duration-300 hover:border-emerald-500/50">
               <h3 className="text-lg font-semibold text-white mb-6">Deployment Status</h3>
               <div className="grid grid-cols-3 gap-4">
@@ -311,7 +336,13 @@ const PresentationDeck = () => {
     Apps: (
       <div className="flex-1 flex flex-col py-16 px-16 relative z-10">
         <div className="h-20 flex justify-center items-center">
-          <Navigation />
+          <Navigation 
+            activePage={activePage}
+            pages={pages}
+            handlePrevPage={handlePrevPage}
+            handleNextPage={handleNextPage}
+            setActivePage={setActivePage}
+          />
         </div>
         <div className="flex-1 flex flex-col items-center">
           <h2 className="text-4xl font-bold text-white mb-16">Our Applications</h2>
@@ -335,18 +366,21 @@ const PresentationDeck = () => {
     )
   };
 
-  // Main Component Return
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col relative overflow-hidden">
       <ParticleCanvas />
       {PageComponents[activePage]}
       {activePage === 'Welcome' && (
         <div className="h-20 flex justify-center items-center relative z-10">
-          <Navigation />
+          <Navigation 
+            activePage={activePage}
+            pages={pages}
+            handlePrevPage={handlePrevPage}
+            handleNextPage={handleNextPage}
+            setActivePage={setActivePage}
+          />
         </div>
       )}
     </div>
   );
-};
-
-export default PresentationDeck;
+}         
