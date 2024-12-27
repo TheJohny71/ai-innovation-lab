@@ -13,15 +13,29 @@ import {
   Clock,
   Globe,
   Layers,
-  Flag
+  Flag,
+  LucideIcon
 } from 'lucide-react';
 import ParticleCanvas from '../ui/ParticleCanvas';
 import AnimatedStats from './AnimatedStats';
 import CascadingCard from '../cards/CascadingCard';
 import ExpandingCard from '../cards/ExpandingCard';
 
+type AppMetrics = Record<string, string>;
+
+type App = {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  icon: LucideIcon;
+  color: string;
+  features: string[];
+  metrics: AppMetrics;
+};
+
 // Apps data
-const apps = [
+const apps: App[] = [
   {
     id: 'ai-analysis',
     title: 'AI Analysis',
@@ -53,6 +67,7 @@ const apps = [
     metrics: { predictionAccuracy: '85%', reportingEfficiency: '75%' }
   }
 ];
+
 const PresentationDeck = () => {
   type PageName = 'Welcome' | 'Solutions' | 'Impact' | 'Apps';
   
@@ -89,6 +104,7 @@ const PresentationDeck = () => {
       setActivePage(pages[currentIndex - 1]);
     }
   };
+
   const Navigation = () => (
     <div className="flex items-center gap-4">
       <button 
@@ -123,7 +139,8 @@ const PresentationDeck = () => {
       </button>
     </div>
   );
-   const PageComponents: Record<PageName, ReactElement> = {
+
+  const PageComponents: Record<PageName, ReactElement> = {
     Welcome: (
       <div className="flex-1 flex flex-col items-center justify-center px-16 relative z-10">
         <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-cyan-400 to-emerald-400 text-transparent bg-clip-text">
@@ -249,7 +266,7 @@ const PresentationDeck = () => {
                 className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-lg p-6 
                          transition-all duration-300 hover:border-emerald-500/50 hover:scale-105"
               >
-                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${metric.color} p-0.5 mb-4`}>
+              <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${metric.color} p-0.5 mb-4`}>
                   <div className="w-full h-full rounded-2xl bg-slate-900 flex items-center justify-center">
                     <metric.icon className="w-6 h-6 text-white" />
                   </div>
@@ -349,4 +366,4 @@ const PresentationDeck = () => {
   );
 };
 
-export default PresentationDeck;
+export default PresentationDeck;  
