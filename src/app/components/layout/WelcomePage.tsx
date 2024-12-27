@@ -188,15 +188,17 @@ const WelcomePage: React.FC = () => {
       
       <div className="relative max-w-7xl mx-auto min-h-screen flex flex-col items-center justify-start pt-24">
         <div className={`text-center mb-24 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-          <h1 className="text-6xl font-bold mb-4 tracking-wide bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 inline-block text-transparent bg-clip-text animate-gradient drop-shadow-2xl">
-            AI Innovation Hub
-          </h1>
-          <h2 className="text-5xl font-bold mb-12 tracking-wide bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 inline-block text-transparent bg-clip-text animate-gradient drop-shadow-2xl">
-            Future-Ready Law Firm
-          </h2>
-          <p className="text-gray-300 text-2xl mt-8 mb-16 mx-auto drop-shadow-lg leading-relaxed whitespace-nowrap">
-            Accelerating disruption through human-centered AI solutions
-          </p>
+          <div className="flex flex-col items-center gap-6">
+            <h1 className="text-7xl font-bold tracking-wide bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 inline-block text-transparent bg-clip-text animate-gradient drop-shadow-2xl">
+              AI Innovation Hub
+            </h1>
+            <h2 className="text-4xl font-medium tracking-wide bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 inline-block text-transparent bg-clip-text animate-gradient drop-shadow-2xl">
+              Future-Ready Law Firm
+            </h2>
+            <p className="text-xl text-gray-300 mt-2 mx-auto drop-shadow-lg leading-relaxed whitespace-nowrap">
+              Accelerating disruption through human-centered AI solutions
+            </p>
+          </div>
         </div>
 
         <div className={`grid grid-cols-3 gap-16 px-8 max-w-7xl mx-auto mt-24 transition-opacity duration-1000 delay-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
