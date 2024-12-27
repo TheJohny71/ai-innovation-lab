@@ -61,15 +61,15 @@ interface FeatureIconProps {
 const FeatureIcon: React.FC<FeatureIconProps> = ({ Icon, title, gradient }) => {
   const [firstWord, ...restWords] = title.split(' ');
   return (
-    <div className="flex flex-col items-center justify-center gap-4 group h-32">
-      <div className={`rounded-2xl p-6 border border-opacity-20 bg-gray-900/40 group-hover:bg-gray-900/60 transition-colors ${gradient.border} shadow-lg flex items-center justify-center`}>
-        <div className="flex items-center justify-center w-12 h-12">
+    <div className="flex flex-col items-center justify-center gap-8 group h-64">
+      <div className={`rounded-2xl p-10 border border-opacity-20 bg-gray-900/40 group-hover:bg-gray-900/60 transition-colors ${gradient.border} shadow-lg flex items-center justify-center`}>
+        <div className="flex items-center justify-center w-24 h-24">
           <Icon className={`w-full h-full ${gradient.text}`} strokeWidth={1.5} />
         </div>
       </div>
       <div className="flex flex-col items-center">
-        <h3 className={`text-xl font-medium tracking-wide text-center ${gradient.text}`}>{firstWord}</h3>
-        <h3 className={`text-xl font-medium tracking-wide text-center ${gradient.text}`}>{restWords.join(' ')}</h3>
+        <h3 className={`text-3xl font-medium tracking-wide text-center ${gradient.text}`}>{firstWord}</h3>
+        <h3 className={`text-3xl font-medium tracking-wide text-center ${gradient.text}`}>{restWords.join(' ')}</h3>
       </div>
     </div>
   );
@@ -186,7 +186,7 @@ const WelcomePage: React.FC = () => {
       <div className="absolute top-1/4 -left-32 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl" />
       
-      <div className="relative max-w-5xl mx-auto min-h-screen flex flex-col items-center justify-start pt-24">
+      <div className="relative max-w-7xl mx-auto min-h-screen flex flex-col items-center justify-start pt-24">
         <div className={`text-center mb-24 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
           <h1 className="text-6xl font-bold mb-4 tracking-wide bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 inline-block text-transparent bg-clip-text animate-gradient drop-shadow-2xl">
             Future-Ready Law Firm
@@ -199,7 +199,7 @@ const WelcomePage: React.FC = () => {
           </p>
         </div>
 
-        <div className={`grid grid-cols-3 gap-20 px-8 max-w-5xl mx-auto mt-32 transition-opacity duration-1000 delay-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`grid grid-cols-3 gap-16 px-8 max-w-7xl mx-auto mt-24 transition-opacity duration-1000 delay-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
           {features.map((feature, i) => (
             <div key={i} className="flex justify-center">
               <FeatureIcon {...feature} />
