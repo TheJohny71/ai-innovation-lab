@@ -1,9 +1,18 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Star, Sparkles, Workflow, Users } from 'lucide-react';
+import { Star, Sparkles, Workflow, Users, LucideIcon } from 'lucide-react';
 import { debounce } from 'lodash';
 
-const StarField = React.memo(({ mousePosition }) => {
-  const stars = useMemo(() => Array(60).fill().map(() => ({
+interface MousePosition {
+  x: number;
+  y: number;
+}
+
+interface StarFieldProps {
+  mousePosition: MousePosition;
+}
+
+const StarField: React.FC<StarFieldProps> = React.memo(({ mousePosition }) => {
+  const stars = useMemo(() => Array(60).fill(null).map(() => ({
     left: `${Math.random() * 100}%`,
     top: `${Math.random() * 100}%`,
     delay: Math.random() * 3,
@@ -37,7 +46,19 @@ const StarField = React.memo(({ mousePosition }) => {
   );
 });
 
-const FeatureIcon = ({ Icon, title, gradient }) => {
+interface Gradient {
+  text: string;
+  border: string;
+  marginTop?: string;
+}
+
+interface FeatureIconProps {
+  Icon: LucideIcon;
+  title: string;
+  gradient: Gradient;
+}
+
+const FeatureIcon: React.FC<FeatureIconProps> = ({ Icon, title, gradient }) => {
   const [firstWord, ...restWords] = title.split(' ');
   return (
     <div className="flex flex-col items-center justify-center gap-4 group h-32">
@@ -54,7 +75,17 @@ const FeatureIcon = ({ Icon, title, gradient }) => {
   );
 };
 
-const Navigation = ({ items }) => (
+interface NavigationItem {
+  text: string;
+  href: string;
+  current: boolean;
+}
+
+interface NavigationProps {
+  items: NavigationItem[];
+}
+
+const Navigation: React.FC<NavigationProps> = ({ items }) => (
   <nav className="flex justify-center gap-8 fixed bottom-8 left-1/2 transform -translate-x-1/2 backdrop-blur-md bg-gray-900/30 p-2 rounded-2xl border border-gray-700/20 shadow-xl" role="navigation">
     {items.map(({ text, href, current }) => (
       <button
@@ -77,8 +108,15 @@ const Navigation = ({ items }) => (
   </nav>
 );
 
-const WelcomePage = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+interface Feature {
+  Icon: LucideIcon;
+  title: string;
+  description: string;
+  gradient: Gradient;
+}
+
+const WelcomePage: React.FC = () => {
+  const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -86,7 +124,7 @@ const WelcomePage = () => {
   }, []);
 
   const handleMouseMove = useCallback(
-    debounce((e) => {
+    debounce((e: MouseEvent) => {
       setMousePosition({
         x: e.clientX / window.innerWidth,
         y: e.clientY / window.innerHeight,
@@ -100,14 +138,14 @@ const WelcomePage = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [handleMouseMove]);
 
-  const navigation = [
+  const navigation: NavigationItem[] = [
     { text: 'Welcome', href: '/', current: true },
     { text: 'Solutions', href: '/solutions', current: false },
     { text: 'Impact', href: '/impact', current: false },
     { text: 'Apps', href: '/apps', current: false }
   ];
 
-  const features = [
+  const features: Feature[] = [
     { 
       Icon: Sparkles, 
       title: 'Enhanced Client Service',
@@ -133,7 +171,7 @@ const WelcomePage = () => {
       gradient: {
         text: 'text-teal-400',
         border: 'border-teal-400',
-        marginTop: '-2px'  // Adjust position
+        marginTop: '-2px'
       }
     }
   ];
