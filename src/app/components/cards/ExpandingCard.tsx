@@ -1,6 +1,18 @@
-// src/app/components/cards/ExpandingCard.tsx
+/**
+ * Current Date and Time (UTC): 2024-12-27 04:59:13
+ * Current User's Login: TheJohny71
+ */
 import React, { useState } from 'react';
 import { LucideIcon, ChevronDown, ChevronUp } from 'lucide-react';
+
+type AppMetrics = {
+  timeReduction?: string;
+  accuracyRate?: string;
+  processingSpeed?: string;
+  dataAccuracy?: string;
+  predictionAccuracy?: string;
+  reportingEfficiency?: string;
+};
 
 interface ExpandingCardProps {
   id: string;
@@ -10,7 +22,7 @@ interface ExpandingCardProps {
   icon: LucideIcon;
   color: string;
   features: string[];
-  metrics: Record<string, string>;
+  metrics: AppMetrics;
 }
 
 const ExpandingCard: React.FC<ExpandingCardProps> = ({
@@ -22,7 +34,7 @@ const ExpandingCard: React.FC<ExpandingCardProps> = ({
   color,
   features,
   metrics
-}) => {
+}): React.ReactElement => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (

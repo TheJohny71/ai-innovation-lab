@@ -67,8 +67,8 @@ const Navigation = ({
   handlePrevPage: () => void;
   handleNextPage: () => void;
   setActivePage: (page: PageName) => void;
-}) => (
-<div className="flex items-center gap-4">
+}): React.ReactElement => (
+  <div className="flex items-center gap-4">
     <button 
       onClick={handlePrevPage} 
       disabled={pages.indexOf(activePage) === 0} 
@@ -101,12 +101,11 @@ const Navigation = ({
     </button>
   </div>
 );
-
 /**
- * Current Date and Time (UTC): 2024-12-27 04:39:35
+ * Current Date and Time (UTC): 2024-12-27 04:53:35
  * Current User's Login: TheJohny71
  */
-export default function PresentationDeck(): JSX.Element {
+export default function PresentationDeck(): React.ReactElement {
   const [activePage, setActivePage] = useState<PageName>('Welcome');
   const pages: PageName[] = ['Welcome', 'Solutions', 'Impact', 'Apps'];
   const [metrics] = useState({
@@ -141,7 +140,7 @@ export default function PresentationDeck(): JSX.Element {
     }
   };
 
-  const PageComponents: Record<PageName, JSX.Element> = {
+  const PageComponents: Record<PageName, React.ReactElement> = {
     Welcome: (
       <div className="flex-1 flex flex-col items-center justify-center px-16 relative z-10">
         <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-cyan-400 to-emerald-400 text-transparent bg-clip-text">
@@ -219,9 +218,7 @@ export default function PresentationDeck(): JSX.Element {
           />
         </div>
         
-        {/* Main Content Container */}
         <div className="max-w-7xl mx-auto w-full">
-          {/* Header Section */}
           <div className="mb-12 text-center">
             <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-cyan-400 to-emerald-400 text-transparent bg-clip-text">
               Legal AI Implementation Landscape
@@ -231,7 +228,6 @@ export default function PresentationDeck(): JSX.Element {
             </p>
           </div>
 
-          {/* Data Context Alert */}
           <div className="mb-12 bg-slate-800/50 backdrop-blur border border-emerald-500/20 rounded-lg p-6">
             <div className="flex items-center gap-2 text-emerald-400 mb-2">
               <Clock className="w-5 h-5" />
@@ -242,7 +238,6 @@ export default function PresentationDeck(): JSX.Element {
             </p>
           </div>
 
-          {/* Key Metrics Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {[
               {
@@ -291,9 +286,7 @@ export default function PresentationDeck(): JSX.Element {
             ))}
           </div>
 
-          {/* Implementation Analysis Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            {/* Implementation Types */}
             <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-lg p-6 
                           transition-all duration-300 hover:border-emerald-500/50">
               <h3 className="text-lg font-semibold text-white mb-6">Implementation Categories</h3>
@@ -317,8 +310,8 @@ export default function PresentationDeck(): JSX.Element {
                 ))}
               </div>
             </div>
-   {/* Deployment Status */}
-   <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-lg p-6 
+
+            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-lg p-6 
                           transition-all duration-300 hover:border-emerald-500/50">
               <h3 className="text-lg font-semibold text-white mb-6">Deployment Status</h3>
               <div className="grid grid-cols-3 gap-4">
@@ -387,4 +380,4 @@ export default function PresentationDeck(): JSX.Element {
       )}
     </div>
   );
-}         
+}
