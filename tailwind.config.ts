@@ -1,4 +1,3 @@
-// tailwind.config.ts
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -34,6 +33,22 @@ const config: Config = {
           800: '#1e293b',
           900: '#0f172a',
         },
+        gray: {
+          900: '#111827',
+        },
+        teal: {
+          400: '#2dd4bf',
+          500: '#14b8a6',
+        },
+        blue: {
+          400: '#60a5fa',
+          500: '#3b82f6',
+        },
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.5s ease-out forwards',
+        'gradient': 'gradient 15s ease infinite',
+        'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       keyframes: {
         fadeIn: {
@@ -44,11 +59,11 @@ const config: Config = {
           '0%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
           '100%': { backgroundPosition: '0% 50%' },
-        }
-      },
-      animation: {
-        'fade-in': 'fadeIn 0.5s ease-out forwards',
-        'gradient': 'gradient 15s ease infinite',
+        },
+        pulse: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '.5' },
+        },
       },
     },
   },
