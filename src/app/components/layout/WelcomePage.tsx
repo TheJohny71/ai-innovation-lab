@@ -1,3 +1,6 @@
+// Last updated: 2024-12-27 22:39:11 UTC
+// Author: TheJohny71
+
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Star, Sparkles, Workflow, Users, LucideIcon } from 'lucide-react';
 import { debounce } from 'lodash';
@@ -188,14 +191,16 @@ const WelcomePage: React.FC = () => {
       
       <div className="relative max-w-7xl mx-auto min-h-screen flex flex-col items-center justify-start pt-24">
         <div className={`text-center mb-24 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-          <div className="flex flex-col items-center gap-6">
-            <h1 className="text-7xl font-bold tracking-wide bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 inline-block text-transparent bg-clip-text animate-gradient drop-shadow-2xl">
+          <div className="flex flex-col items-center space-y-8">
+            <h1 className="text-7xl font-bold tracking-wide bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 text-transparent bg-clip-text animate-gradient drop-shadow-2xl block">
               AI Innovation Hub
             </h1>
-            <h2 className="text-4xl font-medium tracking-wide bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 inline-block text-transparent bg-clip-text animate-gradient drop-shadow-2xl">
-              Future-Ready Law Firm
-            </h2>
-            <p className="text-xl text-gray-300 mt-2 mx-auto drop-shadow-lg leading-relaxed whitespace-nowrap">
+            <div>
+              <h2 className="text-4xl font-medium tracking-wide bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 text-transparent bg-clip-text animate-gradient drop-shadow-2xl block">
+                Future-Ready Law Firm
+              </h2>
+            </div>
+            <p className="text-xl text-gray-300 drop-shadow-lg leading-relaxed whitespace-nowrap block">
               Accelerating disruption through human-centered AI solutions
             </p>
           </div>
