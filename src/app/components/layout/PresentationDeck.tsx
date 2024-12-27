@@ -102,6 +102,10 @@ const Navigation = ({
   </div>
 );
 
+/** 
+ * Current Date and Time (UTC): 2024-12-27 04:37:48
+ * Current User's Login: TheJohny71
+ */
 export default function PresentationDeck(): JSX.Element {
   const [activePage, setActivePage] = useState<PageName>('Welcome');
   const pages: PageName[] = ['Welcome', 'Solutions', 'Impact', 'Apps'];
