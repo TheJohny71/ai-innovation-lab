@@ -1,3 +1,4 @@
+// tailwind.config.ts
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -33,11 +34,6 @@ const config: Config = {
           800: '#1e293b',
           900: '#0f172a',
         },
-        rose: {
-          400: '#fb7185',
-          500: '#f43f5e',
-          700: '#be123c',
-        }
       },
       keyframes: {
         fadeIn: {
@@ -46,7 +42,7 @@ const config: Config = {
         },
       },
       animation: {
-        fadeIn: 'fadeIn 0.5s ease-out forwards',
+        'fade-in': 'fadeIn 0.5s ease-out forwards',
       },
     },
   },
