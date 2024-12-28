@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Zap, Globe, Clock, Layers, Flag, ArrowRight, Scale } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import Link from 'next/link';
 
 // Types
 interface AlertProps {
@@ -143,8 +144,21 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ value, max, gradient }) => (
     />
   </div>
 );
-
 export default function DisruptionPage() {
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const currentUser = 'TheJohny71';
+
+  useEffect(() => {
+    // Update time every second
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const formattedDateTime = currentTime.toISOString().replace('T', ' ').slice(0, 19);
+
   const [metrics] = useState<DashboardMetrics>({
     cards: [
       {
@@ -246,8 +260,65 @@ export default function DisruptionPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 p-8">
+      {/* Enterprise Data Context Box */}
+      <div className="max-w-7xl mx-auto mb-8">
+        <div className="bg-blue-500/10 border border-blue-400/20 rounded-lg p-4 text-sm text-blue-200/80 flex justify-between items-center backdrop-blur-sm">
+          <div className="flex items-center space-x-2">
+            <Clock className="w-4 h-4" />
+            <span>Current Date and Time (UTC): {formattedDateTime}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Flag className="w-4 h-4" />
+            <span>Current User's Login: {currentUser}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Page Title and Subtitle */}
+      <div className="max-w-7xl mx-auto text-center mb-12">
+        <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 text-transparent bg-clip-text">
+          AI Disruption Dashboard
+        </h1>
+        <p className="text-xl text-gray-300 mb-8">
+          Tracking AI Innovation Impact Across Legal Practice
+        </p>
+
+        {/* Access Complete Dataset Button */}
+        <a
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 text-white font-medium transition-all duration-300 hover:from-purple-600 hover:to-blue-600 shadow-lg hover:shadow-xl"
+        >
+          Access Complete Enterprise Dataset
+          <ArrowRight className="ml-2 w-5 h-5" />
+        </a>
+      </div>
+
+      {/* Message Card */}
+      <div className="max-w-7xl mx-auto mb-12">
+        <Alert className="border-blue-400/20 bg-blue-500/10 backdrop-blur-sm">
+          <div className="flex justify-between items-start">
+            <div>
+              <AlertTitle className="text-blue-300 text-lg mb-2">
+                Latest Update
+              </AlertTitle>
+              <AlertDescription className="text-blue-200/80">
+                AI Innovation Hub is currently tracking and analyzing {metrics.cards[0].value} verified AI initiatives 
+                across {metrics.cards[0].mainStats.trend}. Our focus spans multiple practice areas, with {metrics.cards[3].additionalStats["Document Analysis"].value} implementations 
+                in Document Analysis & Review and {metrics.cards[3].additionalStats["Legal Research"].value} in Legal Research. {metrics.cards[2].value} new launches are 
+                scheduled for early 2024, with a particular emphasis on Q1-Q2 deployments.
+              </AlertDescription>
+            </div>
+            <div className="text-sm text-blue-300/60">
+              Last updated: {formattedDateTime}
+            </div>
+          </div>
+        </Alert>
+      </div>
+
+      {/* Metric Cards */}
       <div className="max-w-7xl mx-auto space-y-12">
-        {/* Metric Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {metrics.cards.map((card, index) => (
             <MetricCard key={index} {...card} />
@@ -287,6 +358,31 @@ export default function DisruptionPage() {
           ))}
         </div>
       </div>
+
+      {/* Bottom Navigation */}
+      <nav className="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex justify-center gap-8 backdrop-blur-md bg-gray-900/30 p-2 rounded-2xl border border-gray-700/20 shadow-xl">
+        <Link
+          href="/"
+          className="px-8 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-300"
+        >
+          Welcome
+        </Link>
+        <Link
+          href="/solutions"
+          className="px-8 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-300"
+        >
+          Solutions
+        </Link>
+        <span className="px-8 py-2.5 text-white bg-gradient-to-br from-purple-500/20 to-blue-500/5 shadow-lg border border-blue-400/20 rounded-xl">
+          Disruption
+        </span>
+        <Link
+          href="/explore"
+          className="px-8 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-300"
+        >
+          Explore
+        </Link>
+      </nav>
     </div>
   );
 }
