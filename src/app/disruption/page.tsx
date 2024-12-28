@@ -2,28 +2,84 @@
 
 import React, { useState, useEffect } from 'react';
 import { Zap, Globe, Clock, Layers, Flag, ArrowRight, Scale } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
-// First, let's create a simple Alert component since we don't have the full UI library
-const Alert = ({ children, className = '' }) => (
+// Types
+interface AlertProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+interface MetricCardProps {
+  icon: LucideIcon;
+  title: string;
+  value: string;
+  subtitle: string;
+  mainStats: {
+    trend: string;
+  };
+  additionalStats: {
+    [key: string]: {
+      value: string;
+      change?: string;
+    };
+  };
+  gradient: {
+    border: string;
+    bg: string;
+    text: string;
+  };
+}
+
+interface ProgressBarProps {
+  value: number;
+  max: number;
+  gradient: string;
+}
+
+interface Metric {
+  name: string;
+  count: number;
+}
+
+interface DashboardMetrics {
+  cards: MetricCardProps[];
+  implementationTypes: Metric[];
+  deploymentStatus: {
+    active: number;
+    development: number;
+    planning: number;
+  };
+}
+
+// Components
+const Alert: React.FC<AlertProps> = ({ children, className = '' }) => (
   <div className={`p-6 rounded-lg border ${className}`}>
     {children}
   </div>
 );
 
-const AlertTitle = ({ children, className = '' }) => (
+const AlertTitle: React.FC<AlertProps> = ({ children, className = '' }) => (
   <h5 className={`text-lg font-medium mb-2 ${className}`}>
     {children}
   </h5>
 );
 
-const AlertDescription = ({ children, className = '' }) => (
+const AlertDescription: React.FC<AlertProps> = ({ children, className = '' }) => (
   <div className={`text-sm ${className}`}>
     {children}
   </div>
 );
 
-// Now paste the MetricCard component code you provided
-const MetricCard = ({ icon: Icon, title, value, subtitle, mainStats, additionalStats, gradient }) => {
+const MetricCard: React.FC<MetricCardProps> = ({ 
+  icon: Icon, 
+  title, 
+  value, 
+  subtitle, 
+  mainStats, 
+  additionalStats, 
+  gradient 
+}) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -56,7 +112,7 @@ const MetricCard = ({ icon: Icon, title, value, subtitle, mainStats, additionalS
           </div>
 
           <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-700/50">
-            {Object.entries(additionalStats).map(([label, stat], index) => (
+            {Object.entries(additionalStats).map(([label, stat]) => (
               <div key={label} className="space-y-1">
                 <div className="text-sm text-gray-400">{label}</div>
                 <div className="text-lg font-semibold text-gray-200">
@@ -76,8 +132,7 @@ const MetricCard = ({ icon: Icon, title, value, subtitle, mainStats, additionalS
   );
 };
 
-// Paste the ProgressBar component code
-const ProgressBar = ({ value, max, gradient }) => (
+const ProgressBar: React.FC<ProgressBarProps> = ({ value, max, gradient }) => (
   <div className="h-3 bg-gray-700/30 rounded-full overflow-hidden">
     <div 
       className={`h-full rounded-full ${gradient}`}
@@ -89,9 +144,8 @@ const ProgressBar = ({ value, max, gradient }) => (
   </div>
 );
 
-// Paste the main Dashboard component but export it as default
 export default function DisruptionPage() {
-  const [metrics] = useState({
+  const [metrics] = useState<DashboardMetrics>({
     cards: [
       {
         icon: Zap,
@@ -113,7 +167,66 @@ export default function DisruptionPage() {
           text: "text-purple-400"
         }
       },
-      // ... rest of your cards data
+      {
+        icon: Globe,
+        title: "Global Deployments",
+        value: "18",
+        subtitle: "regions",
+        mainStats: {
+          trend: "Across 12 Countries"
+        },
+        additionalStats: {
+          "North America": { value: "8" },
+          "Europe": { value: "6" },
+          "Asia Pacific": { value: "3" },
+          "Other Regions": { value: "1" }
+        },
+        gradient: {
+          border: "border-blue-400/20",
+          bg: "bg-blue-500/10",
+          text: "text-blue-400"
+        }
+      },
+      {
+        icon: Clock,
+        title: "2024 Launches",
+        value: "8",
+        subtitle: "scheduled",
+        mainStats: {
+          trend: "Q1-Q2 Focus"
+        },
+        additionalStats: {
+          "Q1 Target": { value: "3" },
+          "Q2 Target": { value: "5" },
+          "In Development": { value: "6" },
+          "Planning Phase": { value: "2" }
+        },
+        gradient: {
+          border: "border-emerald-400/20",
+          bg: "bg-emerald-500/10",
+          text: "text-emerald-400"
+        }
+      },
+      {
+        icon: Layers,
+        title: "Implementation Types",
+        value: "5",
+        subtitle: "categories",
+        mainStats: {
+          trend: "Core Focus Areas"
+        },
+        additionalStats: {
+          "Document Analysis": { value: "14" },
+          "Legal Research": { value: "11" },
+          "Contract Mgmt": { value: "9" },
+          "Knowledge Base": { value: "8" }
+        },
+        gradient: {
+          border: "border-orange-400/20",
+          bg: "bg-orange-500/10",
+          text: "text-orange-400"
+        }
+      }
     ],
     implementationTypes: [
       { name: "Document Analysis & Review", count: 14 },
@@ -129,7 +242,51 @@ export default function DisruptionPage() {
     }
   });
 
+  const totalImplementations = metrics.implementationTypes.reduce((sum, type) => sum + type.count, 0);
+
   return (
-    // ... rest of your Dashboard component JSX
+    <div className="min-h-screen bg-gray-900 p-8">
+      <div className="max-w-7xl mx-auto space-y-12">
+        {/* Metric Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {metrics.cards.map((card, index) => (
+            <MetricCard key={index} {...card} />
+          ))}
+        </div>
+
+        {/* Implementation Types */}
+        <div className="bg-gray-800/40 rounded-2xl p-6 border border-gray-700/50 backdrop-blur-sm">
+          <h3 className="text-xl font-semibold text-gray-200 mb-6">Implementation Types</h3>
+          <div className="space-y-4">
+            {metrics.implementationTypes.map((type, index) => (
+              <div key={index} className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-300">{type.name}</span>
+                  <span className="text-gray-400">{type.count}</span>
+                </div>
+                <ProgressBar 
+                  value={type.count}
+                  max={totalImplementations}
+                  gradient="bg-gradient-to-r from-purple-500 to-blue-500"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Deployment Status */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {Object.entries(metrics.deploymentStatus).map(([status, count], index) => (
+            <Alert key={index} className="border-gray-700/50 bg-gray-800/40 backdrop-blur-sm">
+              <AlertTitle className="text-gray-200 capitalize">{status} Deployments</AlertTitle>
+              <AlertDescription className="text-gray-400">
+                <span className="text-2xl font-bold text-gray-200">{count}</span>
+                <span className="ml-2">projects</span>
+              </AlertDescription>
+            </Alert>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
