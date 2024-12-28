@@ -5,12 +5,53 @@ import { Zap, Globe, Clock, Layers, Flag, ArrowRight, Scale } from 'lucide-react
 import type { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 
-// Types
-interface AlertProps {
-  children: React.ReactNode;
-  className?: string;
-}
+// Components
+const Alert = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
+  <div className={`rounded-lg p-6 ${className}`}>{children}</div>
+);
 
+const AlertTitle = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
+  <h3 className={`font-semibold ${className}`}>{children}</h3>
+);
+
+const AlertDescription = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
+  <div className={`mt-2 ${className}`}>{children}</div>
+);
+
+const MetricCard = ({ icon: Icon, title, value, subtitle, mainStats, additionalStats, gradient }: MetricCardProps) => (
+  <div className={`rounded-2xl p-6 border backdrop-blur-sm ${gradient.border} ${gradient.bg}`}>
+    <div className="flex items-center space-x-2">
+      <Icon className={`w-5 h-5 ${gradient.text}`} />
+      <h3 className={`font-semibold ${gradient.text}`}>{title}</h3>
+    </div>
+    <div className="mt-4">
+      <div className="text-3xl font-bold text-white">{value}</div>
+      <div className="text-sm text-gray-400 mt-1">{subtitle}</div>
+    </div>
+    <div className="mt-4 space-y-2">
+      <div className="text-sm text-gray-400">{mainStats.trend}</div>
+      {Object.entries(additionalStats).map(([key, stat]) => (
+        <div key={key} className="flex justify-between text-sm">
+          <span className="text-gray-400">{key}</span>
+          <span className="text-gray-300">
+            {stat.value} {stat.change && <span className="text-green-400">{stat.change}</span>}
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const ProgressBar = ({ value, max, gradient }: ProgressBarProps) => (
+  <div className="h-2 bg-gray-700/30 rounded-full overflow-hidden">
+    <div
+      className={`h-full ${gradient}`}
+      style={{ width: `${(value / max) * 100}%` }}
+    />
+  </div>
+);
+
+// Types
 interface MetricCardProps {
   icon: LucideIcon;
   title: string;
@@ -52,7 +93,8 @@ interface DashboardMetrics {
     planning: number;
   };
 }
-export default function DisruptionPage() {
+
+function DisruptionPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const currentUser = 'TheJohny71';
 
@@ -97,7 +139,60 @@ export default function DisruptionPage() {
           text: "text-purple-300"
         }
       },
-      // ... other cards data
+      {
+        icon: Scale,
+        title: "Compliance Rate",
+        value: "98.2%",
+        subtitle: "Across all deployments",
+        mainStats: {
+          trend: "Above target"
+        },
+        additionalStats: {
+          "Critical Systems": { value: "99.1%", change: "+0.5%" },
+          "Non-Critical": { value: "97.8%", change: "+1.2%" }
+        },
+        gradient: {
+          border: "border-blue-400/20",
+          bg: "bg-blue-500/10",
+          text: "text-blue-300"
+        }
+      },
+      {
+        icon: Zap,
+        title: "Processing Speed",
+        value: "2.3s",
+        subtitle: "Average response time",
+        mainStats: {
+          trend: "Faster than baseline"
+        },
+        additionalStats: {
+          "Peak Hours": { value: "2.8s", change: "-0.3s" },
+          "Off Hours": { value: "1.9s", change: "-0.2s" }
+        },
+        gradient: {
+          border: "border-yellow-400/20",
+          bg: "bg-yellow-500/10",
+          text: "text-yellow-300"
+        }
+      },
+      {
+        icon: Layers,
+        title: "System Integration",
+        value: "92%",
+        subtitle: "Compatibility score",
+        mainStats: {
+          trend: "High performance"
+        },
+        additionalStats: {
+          "API Services": { value: "94%", change: "+2%" },
+          "Data Systems": { value: "90%", change: "+5%" }
+        },
+        gradient: {
+          border: "border-green-400/20",
+          bg: "bg-green-500/10",
+          text: "text-green-300"
+        }
+      }
     ],
     implementationTypes: [
       { name: "Document Analysis & Review", count: 45 },
@@ -114,6 +209,7 @@ export default function DisruptionPage() {
   };
 
   const totalImplementations = metrics.implementationTypes.reduce((sum, type) => sum + type.count, 0);
+
   return (
     <div className="min-h-screen bg-gray-900 p-8">
       {/* Enterprise Data Context Box */}
@@ -140,9 +236,9 @@ export default function DisruptionPage() {
               </AlertTitle>
               <AlertDescription className="text-blue-200/80">
                 AI Innovation Hub is currently tracking and analyzing {metrics.cards[0].value} verified AI initiatives 
-                across {metrics.cards[0].mainStats.trend}. Our focus spans multiple practice areas, with {metrics.cards[3]?.additionalStats["Document Analysis"]?.value || '45'} implementations 
-                in Document Analysis & Review and {metrics.cards[3]?.additionalStats["Legal Research"]?.value || '35'} in Legal Research. {metrics.cards[2]?.value || '34'} new launches are 
-                scheduled for early {new Date().getFullYear()}, with a particular emphasis on Q1-Q2 deployments.
+                across {metrics.cards[0].mainStats.trend}. Our focus spans multiple practice areas, with {metrics.implementationTypes[0].count} implementations 
+                in Document Analysis & Review and {metrics.implementationTypes[1].count} in Legal Research. {metrics.deploymentStatus.planning} new launches are 
+                scheduled for early {currentTime.getFullYear()}, with a particular emphasis on Q1-Q2 deployments.
               </AlertDescription>
             </div>
             <div className="text-sm text-blue-300/60">
@@ -193,7 +289,6 @@ export default function DisruptionPage() {
           ))}
         </div>
       </div>
-
       {/* Bottom Navigation */}
       <nav className="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex justify-center gap-8 backdrop-blur-md bg-gray-900/30 p-2 rounded-2xl border border-gray-700/20 shadow-xl">
         <Link
@@ -221,3 +316,5 @@ export default function DisruptionPage() {
     </div>
   );
 }
+
+export default DisruptionPage;  // Keep only this export default
