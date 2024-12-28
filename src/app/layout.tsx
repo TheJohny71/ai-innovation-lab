@@ -1,5 +1,5 @@
 import './globals.css';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next'; // Add Viewport import
 import { Inter } from 'next/font/google';
 
 // Optimize font loading with subset and display settings
@@ -9,14 +9,19 @@ const inter = Inter({
   variable: '--font-inter', // Enable CSS variable for font
 });
 
-// Enhanced metadata
+// Separate viewport configuration
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#0f172a', // Moved from metadata to viewport
+};
+
+// Enhanced metadata without viewport and themeColor
 export const metadata: Metadata = {
   title: 'AI Innovation Lab',
   description: 'Transforming legal practice through AI innovation',
   keywords: 'AI, Legal Tech, Innovation, Legal Practice, Automation',
   authors: [{ name: 'TheJohny71' }],
-  viewport: 'width=device-width, initial-scale=1',
-  themeColor: '#0f172a', // Matches bg-slate-900
   robots: 'index, follow',
 };
 
