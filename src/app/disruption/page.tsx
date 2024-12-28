@@ -1,33 +1,68 @@
 'use client';
 
-import React from 'react';
-import { Zap, Globe, Clock, Layers, Flag, ArrowRight, Scale } from 'lucide-react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { Zap, Globe, Clock, Layers, Flag, ArrowRight, Scale, Star } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { debounce } from 'lodash';
 
-// Components
-const Alert = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <div className={`rounded-lg p-6 ${className}`}>{children}</div>
-);
+interface MousePosition {
+  x: number;
+  y: number;
+}
 
-const AlertTitle = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <h3 className={`font-semibold ${className}`}>{children}</h3>
-);
+interface StarFieldProps {
+  mousePosition: MousePosition;
+}
 
-const AlertDescription = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <div className={`mt-2 ${className}`}>{children}</div>
-);
+const StarField: React.FC<StarFieldProps> = React.memo(({ mousePosition }) => {
+  const stars = useMemo(() => Array(60).fill(null).map(() => ({
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    delay: Math.random() * 3,
+    duration: 2 + Math.random() * 3,
+    isAccent: Math.random() > 0.7,
+    scale: 0.5 + Math.random() * 0.5
+  })), []);
 
+  return (
+    <div className="absolute inset-0 opacity-30">
+      {stars.map((star, i) => (
+        <div
+          key={i}
+          className="absolute animate-pulse transition-transform duration-500 ease-cubic-bezier"
+          style={{
+            left: star.left,
+            top: star.top,
+            transform: `translate3d(${mousePosition.x * 20}px, ${mousePosition.y * 20}px, 0) scale(${star.scale})`,
+            animationDelay: `${star.delay}s`,
+            animationDuration: `${star.duration}s`,
+            transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+          }}
+        >
+          <Star 
+            className={`w-2 h-2 ${star.isAccent ? 'text-teal-400' : 'text-blue-400'}`}
+            aria-hidden="true"
+          />
+        </div>
+      ))}
+    </div>
+  );
+});
+
+StarField.displayName = 'StarField';
+
+// Components remain the same
 const MetricCard = ({ icon: Icon, title, value, subtitle, mainStats, additionalStats, gradient }: MetricCardProps) => (
-  <div className={`rounded-2xl p-6 border backdrop-blur-sm ${gradient.border} ${gradient.bg}`}>
-    <div className="flex items-center space-x-2">
-      <Icon className={`w-5 h-5 ${gradient.text}`} />
+  <div className={`rounded-xl p-8 border-2 backdrop-blur-sm bg-gray-900/40 group hover:bg-gray-900/60 transition-colors ${gradient.border}`}>
+    <div className="flex items-center space-x-3 mb-6">
+      <Icon className={`w-6 h-6 ${gradient.text}`} strokeWidth={1.5} />
       <h3 className={`font-semibold ${gradient.text}`}>{title}</h3>
     </div>
-    <div className="mt-4">
-      <div className="text-3xl font-bold text-white">{value}</div>
-      <div className="text-sm text-gray-400 mt-1">{subtitle}</div>
+    <div>
+      <div className="text-4xl font-bold text-white mb-2">{value}</div>
+      <div className="text-sm text-gray-400">{subtitle}</div>
     </div>
-    <div className="mt-4 space-y-2">
+    <div className="mt-6 space-y-3">
       <div className="text-sm text-gray-400">{mainStats.trend}</div>
       {Object.entries(additionalStats).map(([key, stat]) => (
         <div key={key} className="flex justify-between text-sm">
@@ -50,7 +85,7 @@ const ProgressBar = ({ value, max, gradient }: ProgressBarProps) => (
   </div>
 );
 
-// Types
+// Types remain the same...
 interface MetricCardProps {
   icon: LucideIcon;
   title: string;
@@ -94,7 +129,39 @@ interface DashboardMetrics {
 }
 
 function DisruptionPage() {
-  // Mock data for metrics
+  const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
+  const debouncedSetMousePosition = useMemo(
+    () =>
+      debounce((x: number, y: number) => {
+        setMousePosition({ x, y });
+      }, 16),
+    []
+  );
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    debouncedSetMousePosition(
+      e.clientX / window.innerWidth,
+      e.clientY / window.innerHeight
+    );
+  }, [debouncedSetMousePosition]);
+
+  useEffect(() => {
+    return () => {
+      debouncedSetMousePosition.cancel();
+    };
+  }, [debouncedSetMousePosition]);
+
+  useEffect(() => {
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [handleMouseMove]);
+
   const metrics: DashboardMetrics = {
     cards: [
       {
@@ -114,7 +181,7 @@ function DisruptionPage() {
         gradient: {
           border: "border-purple-400/20",
           bg: "bg-purple-500/10",
-          text: "text-purple-300"
+          text: "text-purple-400"
         }
       },
       {
@@ -134,7 +201,7 @@ function DisruptionPage() {
         gradient: {
           border: "border-blue-400/20",
           bg: "bg-blue-500/10",
-          text: "text-blue-300"
+          text: "text-blue-400"
         }
       },
       {
@@ -154,7 +221,7 @@ function DisruptionPage() {
         gradient: {
           border: "border-blue-400/20",
           bg: "bg-blue-500/10",
-          text: "text-blue-300"
+          text: "text-blue-400"
         }
       },
       {
@@ -174,7 +241,7 @@ function DisruptionPage() {
         gradient: {
           border: "border-teal-400/20",
           bg: "bg-teal-500/10",
-          text: "text-teal-300"
+          text: "text-teal-400"
         }
       }
     ],
@@ -195,31 +262,35 @@ function DisruptionPage() {
   const totalImplementations = metrics.implementationTypes.reduce((sum, type) => sum + type.count, 0);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white relative">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.02)_0%,rgba(0,0,0,0)_70%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(56,189,248,0.005)_1px,transparent_1px),linear-gradient(to_bottom,rgba(56,189,248,0.005)_1px,transparent_1px)] bg-[size:64px_64px]" />
-      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-purple-500/5 via-blue-500/5 to-transparent" />
+    <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.03)_0%,rgba(0,0,0,0)_50%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(56,189,248,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(56,189,248,0.01)_1px,transparent_1px)] bg-[size:64px_64px]" />
       
-      <div className="relative max-w-7xl mx-auto px-8 py-16">
-        <div className="mb-20 max-w-5xl">
-          <h1 className="text-5xl font-bold mb-6 tracking-tight whitespace-nowrap overflow-hidden">
+      <StarField mousePosition={mousePosition} />
+      
+      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl" />
+      
+      <div className="relative max-w-7xl mx-auto px-8 py-24">
+        <div className={`mb-24 max-w-5xl transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+          <h1 className="text-7xl font-bold mb-6 tracking-tight">
             <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 inline-block text-transparent bg-clip-text">
               Law Firm AI Disruption Index
             </span>
-            <span className="block text-xl text-gray-400 mt-4 normal-case">
+            <span className="block text-xl text-gray-400 mt-6">
               Tracking AI innovation in global law firms
             </span>
           </h1>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24 transition-opacity duration-1000 delay-200 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
           {metrics.cards.map((card, index) => (
             <MetricCard key={index} {...card} />
           ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-          <div className="bg-gray-800/40 rounded-2xl p-8 border border-blue-400/10 backdrop-blur-sm">
+        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24 transition-opacity duration-1000 delay-400 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+          <div className="bg-gray-900/40 rounded-xl p-8 border border-blue-400/10 backdrop-blur-sm">
             <h3 className="text-2xl font-medium text-white mb-8 flex items-center justify-between">
               Implementation Types
               <span className="text-sm text-gray-400">By practice area</span>
@@ -241,14 +312,14 @@ function DisruptionPage() {
             </div>
           </div>
 
-          <div className="bg-gray-800/40 rounded-2xl p-8 border border-blue-400/10 backdrop-blur-sm">
+          <div className="bg-gray-900/40 rounded-xl p-8 border border-blue-400/10 backdrop-blur-sm">
             <h3 className="text-2xl font-medium text-white mb-8 flex items-center justify-between">
               Deployment Status
               <span className="text-sm text-gray-400">Current state</span>
             </h3>
             <div className="grid grid-cols-3 gap-6">
               {Object.entries(metrics.deploymentStatus).map(([status, count]) => (
-                <div key={status} className="text-center p-6 bg-gray-700/30 rounded-xl border border-blue-400/20">
+                <div key={status} className="text-center p-6 bg-gray-900/40 rounded-xl border border-blue-400/20">
                   <div className="text-3xl font-bold text-blue-400 mb-2">
                     {count}
                   </div>
@@ -259,27 +330,25 @@ function DisruptionPage() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 pt-8 mt-16">
-          <div className="flex flex-col items-center gap-8">
-            <button className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors">
-              <span>Access Complete Enterprise Dataset</span>
-              <ArrowRight className="w-4 h-4" />
+        <div className={`flex flex-col items-center gap-12 transition-opacity duration-1000 delay-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+          <button className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors text-lg">
+            <span>Access Complete Enterprise Dataset</span>
+            <ArrowRight className="w-5 h-5" />
+          </button>
+          
+          <div className="flex justify-center gap-20">
+            <button onClick={() => window.location.href = '/welcomepage'} className="px-6 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-300">
+              Welcome
             </button>
-            
-            <div className="flex justify-center gap-16">
-              <button onClick={() => window.location.href = '/'} className="px-4 py-2 rounded-lg bg-gray-800/60 text-gray-300 hover:text-white transition-colors">
-                Welcome
-              </button>
-              <button onClick={() => window.location.href = '/solutions'} className="px-4 py-2 text-gray-300 hover:text-white transition-colors">
-                Solutions
-              </button>
-              <button className="px-4 py-2 rounded-lg bg-blue-900/60 text-blue-400 transition-colors">
-                Disruption
-              </button>
-              <button onClick={() => window.location.href = '/apps'} className="px-4 py-2 text-gray-300 hover:text-white transition-colors">
-                Apps
-              </button>
-            </div>
+            <button onClick={() => window.location.href = '/solutions'} className="px-6 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-300">
+              Solutions
+            </button>
+            <button className="px-6 py-2.5 text-white bg-gradient-to-br from-purple-500/20 to-blue-500/5 shadow-lg border border-blue-400/20 rounded-xl">
+              Disruption
+            </button>
+            <button onClick={() => window.location.href = '/apps'} className="px-6 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-300">
+              Apps
+            </button>
           </div>
         </div>
       </div>
