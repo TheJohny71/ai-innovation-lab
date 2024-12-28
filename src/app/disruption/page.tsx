@@ -51,7 +51,6 @@ const StarField: React.FC<StarFieldProps> = React.memo(({ mousePosition }) => {
 
 StarField.displayName = 'StarField';
 
-// Components remain the same
 const MetricCard = ({ icon: Icon, title, value, subtitle, mainStats, additionalStats, gradient }: MetricCardProps) => (
   <div className={`rounded-xl p-8 border-2 backdrop-blur-sm bg-gray-900/40 group hover:bg-gray-900/60 transition-colors ${gradient.border}`}>
     <div className="flex items-center space-x-3 mb-6">
@@ -85,7 +84,6 @@ const ProgressBar = ({ value, max, gradient }: ProgressBarProps) => (
   </div>
 );
 
-// Types remain the same...
 interface MetricCardProps {
   icon: LucideIcon;
   title: string;
@@ -317,25 +315,26 @@ function DisruptionPage() {
               Deployment Status
               <span className="text-sm text-gray-400">Current state</span>
             </h3>
-            <div className="grid grid-cols-3 gap-6">
-              {Object.entries(metrics.deploymentStatus).map(([status, count]) => (
-                <div key={status} className="text-center p-6 bg-gray-900/40 rounded-xl border border-blue-400/20">
-                  <div className="text-3xl font-bold text-blue-400 mb-2">
-                    {count}
+            <div className="space-y-8">
+              <div className="grid grid-cols-3 gap-6">
+                {Object.entries(metrics.deploymentStatus).map(([status, count]) => (
+                  <div key={status} className="text-center p-6 bg-gray-900/40 rounded-xl border border-blue-400/20">
+                    <div className="text-3xl font-bold text-blue-400 mb-2">
+                      {count}
+                    </div>
+                    <div className="text-sm text-gray-400 capitalize">{status}</div>
                   </div>
-                  <div className="text-sm text-gray-400 capitalize">{status}</div>
-                </div>
-              ))}
+                ))}
+              </div>
+              <button className="w-full flex items-center justify-center gap-2 text-gray-300 hover:text-white transition-colors bg-gray-900/40 rounded-xl border border-blue-400/20 p-6">
+                <span className="text-lg">Access Complete Enterprise Dataset</span>
+                <ArrowRight className="w-5 h-5" />
+              </button>
             </div>
           </div>
         </div>
 
         <div className={`flex flex-col items-center gap-12 transition-opacity duration-1000 delay-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-          <button className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors text-lg">
-            <span>Access Complete Enterprise Dataset</span>
-            <ArrowRight className="w-5 h-5" />
-          </button>
-          
           <div className="flex justify-center gap-20">
             <button onClick={() => window.location.href = '/welcomepage'} className="px-6 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-300">
               Welcome
