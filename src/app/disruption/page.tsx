@@ -93,7 +93,6 @@ interface DashboardMetrics {
     planning: number;
   };
 }
-
 function DisruptionPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const currentUser = 'TheJohny71';
@@ -207,7 +206,6 @@ function DisruptionPage() {
       planning: 34
     }
   };
-
   const totalImplementations = metrics.implementationTypes.reduce((sum, type) => sum + type.count, 0);
 
   return (
@@ -221,11 +219,10 @@ function DisruptionPage() {
           </div>
           <div className="flex items-center space-x-2">
             <Flag className="w-4 h-4" />
-            <span>Current User's Login: {currentUser}</span>
+            <span>Current User&apos;s Login: {currentUser}</span>
           </div>
         </div>
       </div>
-
       {/* Message Card */}
       <div className="max-w-7xl mx-auto mb-12">
         <Alert className="border-blue-400/20 bg-blue-500/10 backdrop-blur-sm">
@@ -255,7 +252,6 @@ function DisruptionPage() {
             <MetricCard key={index} {...card} />
           ))}
         </div>
-
         {/* Implementation Types */}
         <div className="bg-gray-800/40 rounded-2xl p-6 border border-gray-700/50 backdrop-blur-sm">
           <h3 className="text-xl font-semibold text-gray-200 mb-6">Implementation Types</h3>
@@ -317,4 +313,4 @@ function DisruptionPage() {
   );
 }
 
-export default DisruptionPage;  // Keep only this export default
+export default DisruptionPage;
