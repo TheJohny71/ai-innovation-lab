@@ -127,15 +127,29 @@ const WelcomePage: React.FC = () => {
     setIsLoaded(true);
   }, []);
 
-  const handleMouseMove = useCallback(
-    debounce((e: MouseEvent) => {
-      setMousePosition({
-        x: e.clientX / window.innerWidth,
-        y: e.clientY / window.innerHeight,
-      });
-    }, 16),
-    [] // This is where the warning is coming from
+  // Create a memoized debounced function
+  const debouncedSetMousePosition = useMemo(
+    () =>
+      debounce((x: number, y: number) => {
+        setMousePosition({ x, y });
+      }, 16),
+    []
   );
+
+  // Update the handleMouseMove implementation
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    debouncedSetMousePosition(
+      e.clientX / window.innerWidth,
+      e.clientY / window.innerHeight
+    );
+  }, [debouncedSetMousePosition]);
+
+  // Cleanup the debounced function
+  useEffect(() => {
+    return () => {
+      debouncedSetMousePosition.cancel();
+    };
+  }, [debouncedSetMousePosition]);
 
   useEffect(() => {
     window.addEventListener('mousemove', handleMouseMove);
@@ -145,7 +159,7 @@ const WelcomePage: React.FC = () => {
   const navigation: NavigationItem[] = [
     { text: 'Welcome', href: '/', current: true },
     { text: 'Solutions', href: '/solutions', current: false },
-    { text: 'Disruption', href: '/disruption', current: false }, // Changed from Impact to Disruption
+    { text: 'Disruption', href: '/disruption', current: false },
     { text: 'Apps', href: '/apps', current: false }
   ];
 
