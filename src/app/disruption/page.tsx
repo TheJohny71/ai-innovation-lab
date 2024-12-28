@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Zap, Globe, Clock, Layers, Flag, ArrowRight, Scale } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import Link from 'next/link';
 
 // Components
 const Alert = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
@@ -93,44 +92,24 @@ interface DashboardMetrics {
     planning: number;
   };
 }
+
 function DisruptionPage() {
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const currentUser = 'TheJohny71';
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const formatDateTime = (date: Date) => {
-    return date.toLocaleString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-      timeZone: 'UTC'
-    });
-  };
-
   // Mock data for metrics
   const metrics: DashboardMetrics = {
     cards: [
       {
-        icon: Globe,
-        title: "Total AI Initiatives",
-        value: "145",
-        subtitle: "Global implementations",
+        icon: Zap,
+        title: "Total Initiatives",
+        value: "31",
+        subtitle: "verified",
         mainStats: {
-          trend: "28 jurisdictions"
+          trend: "From 25 Law Firms"
         },
         additionalStats: {
-          "Active": { value: "89", change: "+12%" },
-          "In Development": { value: "56", change: "+8%" }
+          "Unique Firms": { value: "25" },
+          "AmLaw 100": { value: "19" },
+          "Active Projects": { value: "24" },
+          "Pilot Phase": { value: "7" }
         },
         gradient: {
           border: "border-purple-400/20",
@@ -139,16 +118,18 @@ function DisruptionPage() {
         }
       },
       {
-        icon: Scale,
-        title: "Compliance Rate",
-        value: "98.2%",
-        subtitle: "Across all deployments",
+        icon: Globe,
+        title: "Global Reach",
+        value: "18",
+        subtitle: "global deployments",
         mainStats: {
-          trend: "Above target"
+          trend: "58% Global Scale"
         },
         additionalStats: {
-          "Critical Systems": { value: "99.1%", change: "+0.5%" },
-          "Non-Critical": { value: "97.8%", change: "+1.2%" }
+          "Global Firms": { value: "18" },
+          "US Focus": { value: "13" },
+          "Coverage": { value: "58%" },
+          "Regions": { value: "4" }
         },
         gradient: {
           border: "border-blue-400/20",
@@ -157,158 +138,151 @@ function DisruptionPage() {
         }
       },
       {
-        icon: Zap,
-        title: "Processing Speed",
-        value: "2.3s",
-        subtitle: "Average response time",
+        icon: Layers,
+        title: "Active Projects",
+        value: "24",
+        subtitle: "in production",
         mainStats: {
-          trend: "Faster than baseline"
+          trend: "77% Active Rate"
         },
         additionalStats: {
-          "Peak Hours": { value: "2.8s", change: "-0.3s" },
-          "Off Hours": { value: "1.9s", change: "-0.2s" }
+          "Development": { value: "4" },
+          "Planning": { value: "3" },
+          "Success Rate": { value: "89%" },
+          "Use Cases": { value: "12" }
         },
         gradient: {
-          border: "border-yellow-400/20",
-          bg: "bg-yellow-500/10",
-          text: "text-yellow-300"
+          border: "border-blue-400/20",
+          bg: "bg-blue-500/10",
+          text: "text-blue-300"
         }
       },
       {
-        icon: Layers,
-        title: "System Integration",
-        value: "92%",
-        subtitle: "Compatibility score",
+        icon: Flag,
+        title: "2024 Launches",
+        value: "8",
+        subtitle: "this year",
         mainStats: {
-          trend: "High performance"
+          trend: "vs 6 in 2023"
         },
         additionalStats: {
-          "API Services": { value: "94%", change: "+2%" },
-          "Data Systems": { value: "90%", change: "+5%" }
+          "2023 Total": { value: "6" },
+          "2022 Total": { value: "4" },
+          "Growth": { value: "33%" },
+          "Pipeline": { value: "5" }
         },
         gradient: {
-          border: "border-green-400/20",
-          bg: "bg-green-500/10",
-          text: "text-green-300"
+          border: "border-teal-400/20",
+          bg: "bg-teal-500/10",
+          text: "text-teal-300"
         }
       }
     ],
     implementationTypes: [
-      { name: "Document Analysis & Review", count: 45 },
-      { name: "Legal Research", count: 35 },
-      { name: "Contract Management", count: 25 },
-      { name: "Compliance Monitoring", count: 20 },
-      { name: "Case Prediction", count: 15 }
+      { name: "Document Analysis & Review", count: 14 },
+      { name: "Legal Research", count: 11 },
+      { name: "Contract Management", count: 9 },
+      { name: "Knowledge Management", count: 8 },
+      { name: "Client Service Automation", count: 7 }
     ],
     deploymentStatus: {
-      active: 89,
-      development: 56,
-      planning: 34
+      active: 24,
+      development: 4,
+      planning: 3
     }
   };
+
   const totalImplementations = metrics.implementationTypes.reduce((sum, type) => sum + type.count, 0);
 
   return (
-    <div className="min-h-screen bg-gray-900 p-8">
-      {/* Enterprise Data Context Box */}
-      <div className="max-w-7xl mx-auto mb-8">
-        <div className="bg-blue-500/10 border border-blue-400/20 rounded-lg p-4 text-sm text-blue-200/80 flex justify-between items-center backdrop-blur-sm">
-          <div className="flex items-center space-x-2">
-            <Clock className="w-4 h-4" />
-            <span>Current Date and Time (UTC): {formatDateTime(currentTime)}</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Flag className="w-4 h-4" />
-            <span>Current User&apos;s Login: {currentUser}</span>
-          </div>
+    <div className="min-h-screen bg-gray-900 text-white relative">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.02)_0%,rgba(0,0,0,0)_70%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(56,189,248,0.005)_1px,transparent_1px),linear-gradient(to_bottom,rgba(56,189,248,0.005)_1px,transparent_1px)] bg-[size:64px_64px]" />
+      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-purple-500/5 via-blue-500/5 to-transparent" />
+      
+      <div className="relative max-w-7xl mx-auto px-8 py-16">
+        <div className="mb-20 max-w-5xl">
+          <h1 className="text-5xl font-bold mb-6 tracking-tight whitespace-nowrap overflow-hidden">
+            <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 inline-block text-transparent bg-clip-text">
+              Law Firm AI Disruption Index
+            </span>
+            <span className="block text-xl text-gray-400 mt-4 normal-case">
+              Tracking AI innovation in global law firms
+            </span>
+          </h1>
         </div>
-      </div>
-      {/* Message Card */}
-      <div className="max-w-7xl mx-auto mb-12">
-        <Alert className="border-blue-400/20 bg-blue-500/10 backdrop-blur-sm">
-          <div className="flex justify-between items-start">
-            <div>
-              <AlertTitle className="text-blue-300 text-lg mb-2">
-                Latest Update
-              </AlertTitle>
-              <AlertDescription className="text-blue-200/80">
-                AI Innovation Hub is currently tracking and analyzing {metrics.cards[0].value} verified AI initiatives 
-                across {metrics.cards[0].mainStats.trend}. Our focus spans multiple practice areas, with {metrics.implementationTypes[0].count} implementations 
-                in Document Analysis & Review and {metrics.implementationTypes[1].count} in Legal Research. {metrics.deploymentStatus.planning} new launches are 
-                scheduled for early {currentTime.getFullYear()}, with a particular emphasis on Q1-Q2 deployments.
-              </AlertDescription>
-            </div>
-            <div className="text-sm text-blue-300/60">
-              Last updated: {formatDateTime(currentTime)}
-            </div>
-          </div>
-        </Alert>
-      </div>
 
-      {/* Metric Cards */}
-      <div className="max-w-7xl mx-auto space-y-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
           {metrics.cards.map((card, index) => (
             <MetricCard key={index} {...card} />
           ))}
         </div>
-        {/* Implementation Types */}
-        <div className="bg-gray-800/40 rounded-2xl p-6 border border-gray-700/50 backdrop-blur-sm">
-          <h3 className="text-xl font-semibold text-gray-200 mb-6">Implementation Types</h3>
-          <div className="space-y-4">
-            {metrics.implementationTypes.map((type, index) => (
-              <div key={index} className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-300">{type.name}</span>
-                  <span className="text-gray-400">{type.count}</span>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+          <div className="bg-gray-800/40 rounded-2xl p-8 border border-blue-400/10 backdrop-blur-sm">
+            <h3 className="text-2xl font-medium text-white mb-8 flex items-center justify-between">
+              Implementation Types
+              <span className="text-sm text-gray-400">By practice area</span>
+            </h3>
+            <div className="space-y-8">
+              {metrics.implementationTypes.map((item) => (
+                <div key={item.name} className="space-y-3">
+                  <div className="flex justify-between text-base">
+                    <span className="text-gray-300 font-medium">{item.name}</span>
+                    <span className="text-gray-400">{item.count}</span>
+                  </div>
+                  <ProgressBar 
+                    value={item.count}
+                    max={Math.max(...metrics.implementationTypes.map(t => t.count))}
+                    gradient="bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400"
+                  />
                 </div>
-                <ProgressBar 
-                  value={type.count}
-                  max={totalImplementations}
-                  gradient="bg-gradient-to-r from-purple-500 to-blue-500"
-                />
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-gray-800/40 rounded-2xl p-8 border border-blue-400/10 backdrop-blur-sm">
+            <h3 className="text-2xl font-medium text-white mb-8 flex items-center justify-between">
+              Deployment Status
+              <span className="text-sm text-gray-400">Current state</span>
+            </h3>
+            <div className="grid grid-cols-3 gap-6">
+              {Object.entries(metrics.deploymentStatus).map(([status, count]) => (
+                <div key={status} className="text-center p-6 bg-gray-700/30 rounded-xl border border-blue-400/20">
+                  <div className="text-3xl font-bold text-blue-400 mb-2">
+                    {count}
+                  </div>
+                  <div className="text-sm text-gray-400 capitalize">{status}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Deployment Status */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {Object.entries(metrics.deploymentStatus).map(([status, count], index) => (
-            <Alert key={index} className="border-gray-700/50 bg-gray-800/40 backdrop-blur-sm">
-              <AlertTitle className="text-gray-200 capitalize">{status} Deployments</AlertTitle>
-              <AlertDescription className="text-gray-400">
-                <span className="text-2xl font-bold text-gray-200">{count}</span>
-                <span className="ml-2">projects</span>
-              </AlertDescription>
-            </Alert>
-          ))}
+        <div className="border-t border-gray-800 pt-8 mt-16">
+          <div className="flex flex-col items-center gap-8">
+            <button className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors">
+              <span>Access Complete Enterprise Dataset</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            
+            <div className="flex justify-center gap-16">
+              <button onClick={() => window.location.href = '/'} className="px-4 py-2 rounded-lg bg-gray-800/60 text-gray-300 hover:text-white transition-colors">
+                Welcome
+              </button>
+              <button onClick={() => window.location.href = '/solutions'} className="px-4 py-2 text-gray-300 hover:text-white transition-colors">
+                Solutions
+              </button>
+              <button className="px-4 py-2 rounded-lg bg-blue-900/60 text-blue-400 transition-colors">
+                Disruption
+              </button>
+              <button onClick={() => window.location.href = '/apps'} className="px-4 py-2 text-gray-300 hover:text-white transition-colors">
+                Apps
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex justify-center gap-8 backdrop-blur-md bg-gray-900/30 p-2 rounded-2xl border border-gray-700/20 shadow-xl">
-        <Link
-          href="/"
-          className="px-8 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-300"
-        >
-          Welcome
-        </Link>
-        <Link
-          href="/solutions"
-          className="px-8 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-300"
-        >
-          Solutions
-        </Link>
-        <span className="px-8 py-2.5 text-white bg-gradient-to-br from-purple-500/20 to-blue-500/5 shadow-lg border border-blue-400/20 rounded-xl">
-          Disruption
-        </span>
-        <Link
-          href="/explore"
-          className="px-8 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-300"
-        >
-          Explore
-        </Link>
-      </nav>
     </div>
   );
 }
