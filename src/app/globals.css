@@ -1,10 +1,37 @@
-/* Keep existing Tailwind directives */
+/* Tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Keep existing utilities */
+/* Base layer customizations */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-slate-900 text-slate-100 antialiased;
+  }
+}
+
+/* Component layer customizations */
+@layer components {
+  .gradient-text {
+    @apply bg-gradient-to-r from-purple-400 via-cyan-400 to-emerald-400 text-transparent bg-clip-text;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/10;
+  }
+
+  .glass-effect {
+    @apply bg-slate-800/50 backdrop-blur border border-slate-700;
+  }
+}
+
+/* Utility layer customizations */
 @layer utilities {
+  /* Existing fade-in animation */
   .animate-fade-in {
     animation: fadeIn 0.5s ease-out forwards;
   }
@@ -19,58 +46,97 @@
       transform: translateY(0);
     }
   }
+
+  /* Enhanced gradient animation */
+  .animate-gradient {
+    animation: gradient 15s ease infinite;
+    background-size: 200% 200%;
+  }
+
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* New slide-in animation */
+  .animate-slide-in {
+    animation: slideIn 0.6s ease-out forwards;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* New pulse animation */
+  .animate-soft-pulse {
+    animation: softPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes softPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
 }
 
-/* Add new animations and utilities */
-@keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-.animate-gradient {
-  animation: gradient 15s ease infinite;
-  background-size: 200% 200%;
-}
-
-/* Keep existing scrollbar styling */
+/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.1);
+  @apply bg-slate-900/50;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(16, 185, 129, 0.2);
-  border-radius: 4px;
+  @apply bg-emerald-500/20 rounded-full transition-colors duration-200;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.4);
+  @apply bg-emerald-500/40;
 }
 
-/* Base styles */
-body {
-  @apply bg-slate-900 text-slate-100;
-}
-
-/* Update gradient text utility */
-.gradient-text {
-  @apply bg-gradient-to-r from-purple-400 via-cyan-400 to-emerald-400 text-transparent bg-clip-text;
-}
-
-/* Add transition utilities */
-.transition-opacity {
-  transition-property: opacity;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.duration-1000 {
-  transition-duration: 1000ms;
+/* Transition utilities */
+.transition-all-smooth {
+  @apply transition-all duration-300 ease-cubic-bezier;
 }
 
 .ease-cubic-bezier {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Media query for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  @apply outline-none ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none;
+  }
 }

@@ -14,7 +14,8 @@ import {
   Globe,
   Layers,
   Flag,
-  LucideIcon
+  LucideIcon,
+  Scale
 } from 'lucide-react';
 import ParticleCanvas from '../ui/ParticleCanvas';
 import AnimatedStats from './AnimatedStats';
@@ -69,25 +70,26 @@ const apps: App[] = [
 ];
 
 const PresentationDeck = () => {
-  type PageName = 'Welcome' | 'Solutions' | 'Impact' | 'Apps';
+  type PageName = 'Welcome' | 'Solutions' | 'Disruption' | 'Apps';
   
   const [activePage, setActivePage] = useState<PageName>('Welcome');
-  const pages: PageName[] = ['Welcome', 'Solutions', 'Impact', 'Apps'];
+  const pages: PageName[] = ['Welcome', 'Solutions', 'Disruption', 'Apps'];
   const [metrics] = useState({
-    totalInitiatives: 157,
-    globalDeployments: 42,
-    activeProjects: 89,
-    launches2024: 23,
+    totalInitiatives: 31,
+    globalDeployments: 18,
+    activeProjects: 24,
+    launches2024: 8,
     implementationTypes: [
-      { name: 'Document Analysis', count: 45 },
-      { name: 'Case Management', count: 38 },
-      { name: 'Contract Review', count: 35 },
-      { name: 'Legal Research', count: 39 }
+      { name: 'Document Analysis & Review', count: 14 },
+      { name: 'Legal Research', count: 11 },
+      { name: 'Contract Management', count: 9 },
+      { name: 'Knowledge Management', count: 8 },
+      { name: 'Client Service Automation', count: 7 }
     ],
     deploymentStatus: {
-      active: 89,
-      pending: 43,
-      completed: 25
+      active: 24,
+      development: 4,
+      planning: 3
     }
   });
 
@@ -200,7 +202,7 @@ const PresentationDeck = () => {
         </div>
       </div>
     ),
-    Impact: (
+    Disruption: (
       <div className="flex-1 flex flex-col px-16 relative z-10">
         <div className="h-20 flex justify-center items-center">
           <Navigation />
@@ -211,10 +213,10 @@ const PresentationDeck = () => {
           {/* Header Section */}
           <div className="mb-12 text-center">
             <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-cyan-400 to-emerald-400 text-transparent bg-clip-text">
-              Legal AI Implementation Landscape
+              Legal AI Disruption Index
             </h1>
             <p className="text-xl text-slate-300">
-              Comprehensive analysis of AI adoption in legal practice
+              Tracking AI innovation impact in global law firms
             </p>
           </div>
 
@@ -222,10 +224,10 @@ const PresentationDeck = () => {
           <div className="mb-12 bg-slate-800/50 backdrop-blur border border-emerald-500/20 rounded-lg p-6">
             <div className="flex items-center gap-2 text-emerald-400 mb-2">
               <Clock className="w-5 h-5" />
-              <h3 className="font-medium">Real-Time Analytics</h3>
+              <h3 className="font-medium">Enterprise Data Context</h3>
             </div>
             <p className="text-slate-300">
-              Live tracking of {metrics.totalInitiatives} AI initiatives across global legal operations
+              Analysis derived from {metrics.totalInitiatives} verified AI implementations across leading global law firms
             </p>
           </div>
 
@@ -234,31 +236,31 @@ const PresentationDeck = () => {
             {[
               {
                 icon: Zap,
-                title: 'Active Initiatives',
+                title: "Total Initiatives",
                 value: metrics.totalInitiatives,
-                subtitle: 'Total implementations',
-                color: 'from-purple-500 to-purple-700'
+                subtitle: "verified",
+                color: "from-purple-500 to-purple-700"
               },
               {
                 icon: Globe,
-                title: 'Global Reach',
+                title: "Global Reach",
                 value: metrics.globalDeployments,
-                subtitle: 'Countries deployed',
-                color: 'from-cyan-500 to-cyan-700'
+                subtitle: "countries",
+                color: "from-cyan-500 to-cyan-700"
               },
               {
                 icon: Layers,
-                title: 'Current Projects',
+                title: "Active Projects",
                 value: metrics.activeProjects,
-                subtitle: 'In development',
-                color: 'from-emerald-500 to-emerald-700'
+                subtitle: "in production",
+                color: "from-emerald-500 to-emerald-700"
               },
               {
                 icon: Flag,
-                title: 'New Launches',
+                title: "2024 Launches",
                 value: metrics.launches2024,
-                subtitle: '2024 roadmap',
-                color: 'from-rose-500 to-rose-700'
+                subtitle: "this year",
+                color: "from-rose-500 to-rose-700"
               }
             ].map((metric, index) => (
               <div 
@@ -266,7 +268,7 @@ const PresentationDeck = () => {
                 className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-lg p-6 
                          transition-all duration-300 hover:border-emerald-500/50 hover:scale-105"
               >
-              <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${metric.color} p-0.5 mb-4`}>
+                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${metric.color} p-0.5 mb-4`}>
                   <div className="w-full h-full rounded-2xl bg-slate-900 flex items-center justify-center">
                     <metric.icon className="w-6 h-6 text-white" />
                   </div>
@@ -279,7 +281,7 @@ const PresentationDeck = () => {
           </div>
 
           {/* Implementation Analysis Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Implementation Types */}
             <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-lg p-6 
                           transition-all duration-300 hover:border-emerald-500/50">
@@ -366,4 +368,4 @@ const PresentationDeck = () => {
   );
 };
 
-export default PresentationDeck;  
+export default PresentationDeck;
