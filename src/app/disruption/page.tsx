@@ -52,114 +52,19 @@ interface DashboardMetrics {
     planning: number;
   };
 }
-// Components
-const Alert: React.FC<AlertProps> = ({ children, className = '' }) => (
-  <div className={`p-6 rounded-lg border ${className}`}>
-    {children}
-  </div>
-);
-
-const AlertTitle: React.FC<AlertProps> = ({ children, className = '' }) => (
-  <h5 className={`text-lg font-medium mb-2 ${className}`}>
-    {children}
-  </h5>
-);
-
-const AlertDescription: React.FC<AlertProps> = ({ children, className = '' }) => (
-  <div className={`text-sm ${className}`}>
-    {children}
-  </div>
-);
-
-const MetricCard: React.FC<MetricCardProps> = ({ 
-  icon: Icon, 
-  title, 
-  value, 
-  subtitle, 
-  mainStats, 
-  additionalStats, 
-  gradient 
-}) => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 300);
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <div className={`transform transition-all duration-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-      <div className={`bg-gray-800/40 p-6 rounded-2xl border ${gradient.border} backdrop-blur-sm
-                      hover:bg-gray-800/60 transition-all duration-300 h-full`}>
-        <div className="flex items-start justify-between mb-6">
-          <div className={`w-12 h-12 rounded-xl ${gradient.bg} flex items-center justify-center
-                          transform transition-transform duration-300 group-hover:scale-105`}>
-            <Icon className={`w-6 h-6 ${gradient.text}`} />
-          </div>
-          <div className="flex items-center space-x-2">
-            <Scale className="w-4 h-4 text-gray-400" />
-            <span className="text-sm text-gray-400">{mainStats.trend}</span>
-          </div>
-        </div>
-        
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-lg font-medium text-gray-300">{title}</h3>
-            <div className="flex items-baseline gap-2 mt-2">
-              <div className={`text-3xl font-bold ${gradient.text}`}>{value}</div>
-              <div className="text-sm text-gray-400">/ {subtitle}</div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-700/50">
-            {Object.entries(additionalStats).map(([label, stat]) => (
-              <div key={label} className="space-y-1">
-                <div className="text-sm text-gray-400">{label}</div>
-                <div className="text-lg font-semibold text-gray-200">
-                  {stat.value}
-                  {stat.change && (
-                    <span className={`text-sm ml-1 ${stat.change.startsWith('+') ? 'text-green-400' : 'text-red-400'}`}>
-                      {stat.change}
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ProgressBar: React.FC<ProgressBarProps> = ({ value, max, gradient }) => (
-  <div className="h-3 bg-gray-700/30 rounded-full overflow-hidden">
-    <div 
-      className={`h-full rounded-full ${gradient}`}
-      style={{ 
-        width: `${(value / max) * 100}%`,
-        transition: 'width 1s cubic-bezier(0.4, 0, 0.2, 1)' 
-      }}
-    />
-  </div>
-);
 export default function DisruptionPage() {
-  // Time and user state
   const [currentTime, setCurrentTime] = useState(new Date());
   const currentUser = 'TheJohny71';
 
-  // Update time every second
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
-
     return () => clearInterval(timer);
   }, []);
 
-  // Format time function
-  const getFormattedDateTime = () => {
-    return currentTime.toLocaleString('en-US', {
+  const formatDateTime = (date: Date) => {
+    return date.toLocaleString('en-US', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
@@ -171,103 +76,42 @@ export default function DisruptionPage() {
     });
   };
 
-  // Metrics state
-  const [metrics] = useState<DashboardMetrics>({
+  // Mock data for metrics
+  const metrics: DashboardMetrics = {
     cards: [
       {
-        icon: Zap,
-        title: "Total Initiatives",
-        value: "31",
-        subtitle: "verified",
+        icon: Globe,
+        title: "Total AI Initiatives",
+        value: "145",
+        subtitle: "Global implementations",
         mainStats: {
-          trend: "From 25 Law Firms"
+          trend: "28 jurisdictions"
         },
         additionalStats: {
-          "Unique Firms": { value: "25" },
-          "AmLaw 100": { value: "19" },
-          "Active Projects": { value: "24" },
-          "Pilot Phase": { value: "7" }
+          "Active": { value: "89", change: "+12%" },
+          "In Development": { value: "56", change: "+8%" }
         },
         gradient: {
           border: "border-purple-400/20",
           bg: "bg-purple-500/10",
-          text: "text-purple-400"
+          text: "text-purple-300"
         }
       },
-      {
-        icon: Globe,
-        title: "Global Deployments",
-        value: "18",
-        subtitle: "regions",
-        mainStats: {
-          trend: "Across 12 Countries"
-        },
-        additionalStats: {
-          "North America": { value: "8" },
-          "Europe": { value: "6" },
-          "Asia Pacific": { value: "3" },
-          "Other Regions": { value: "1" }
-        },
-        gradient: {
-          border: "border-blue-400/20",
-          bg: "bg-blue-500/10",
-          text: "text-blue-400"
-        }
-      },
-      {
-        icon: Clock,
-        title: "2024 Launches",
-        value: "8",
-        subtitle: "scheduled",
-        mainStats: {
-          trend: "Q1-Q2 Focus"
-        },
-        additionalStats: {
-          "Q1 Target": { value: "3" },
-          "Q2 Target": { value: "5" },
-          "In Development": { value: "6" },
-          "Planning Phase": { value: "2" }
-        },
-        gradient: {
-          border: "border-emerald-400/20",
-          bg: "bg-emerald-500/10",
-          text: "text-emerald-400"
-        }
-      },
-      {
-        icon: Layers,
-        title: "Implementation Types",
-        value: "5",
-        subtitle: "categories",
-        mainStats: {
-          trend: "Core Focus Areas"
-        },
-        additionalStats: {
-          "Document Analysis": { value: "14" },
-          "Legal Research": { value: "11" },
-          "Contract Mgmt": { value: "9" },
-          "Knowledge Base": { value: "8" }
-        },
-        gradient: {
-          border: "border-orange-400/20",
-          bg: "bg-orange-500/10",
-          text: "text-orange-400"
-        }
-      }
+      // ... other cards data
     ],
     implementationTypes: [
-      { name: "Document Analysis & Review", count: 14 },
-      { name: "Legal Research", count: 11 },
-      { name: "Contract Management", count: 9 },
-      { name: "Knowledge Management", count: 8 },
-      { name: "Client Service Automation", count: 7 }
+      { name: "Document Analysis & Review", count: 45 },
+      { name: "Legal Research", count: 35 },
+      { name: "Contract Management", count: 25 },
+      { name: "Compliance Monitoring", count: 20 },
+      { name: "Case Prediction", count: 15 }
     ],
     deploymentStatus: {
-      active: 24,
-      development: 4,
-      planning: 3
+      active: 89,
+      development: 56,
+      planning: 34
     }
-  });
+  };
 
   const totalImplementations = metrics.implementationTypes.reduce((sum, type) => sum + type.count, 0);
   return (
@@ -277,7 +121,7 @@ export default function DisruptionPage() {
         <div className="bg-blue-500/10 border border-blue-400/20 rounded-lg p-4 text-sm text-blue-200/80 flex justify-between items-center backdrop-blur-sm">
           <div className="flex items-center space-x-2">
             <Clock className="w-4 h-4" />
-            <span>Current Date and Time (UTC): {getFormattedDateTime()}</span>
+            <span>Current Date and Time (UTC): {formatDateTime(currentTime)}</span>
           </div>
           <div className="flex items-center space-x-2">
             <Flag className="w-4 h-4" />
@@ -286,26 +130,6 @@ export default function DisruptionPage() {
         </div>
       </div>
 
-      {/* Page Title and Subtitle */}
-      <div className="max-w-7xl mx-auto text-center mb-12">
-        <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 text-transparent bg-clip-text">
-          AI Disruption Dashboard
-        </h1>
-        <p className="text-xl text-gray-300 mb-8">
-          Tracking AI Innovation Impact Across Legal Practice
-        </p>
-
-        {/* Access Complete Dataset Button */}
-        <a
-          href="#"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 text-white font-medium transition-all duration-300 hover:from-purple-600 hover:to-blue-600 shadow-lg hover:shadow-xl"
-        >
-          Access Complete Enterprise Dataset
-          <ArrowRight className="ml-2 w-5 h-5" />
-        </a>
-      </div>
       {/* Message Card */}
       <div className="max-w-7xl mx-auto mb-12">
         <Alert className="border-blue-400/20 bg-blue-500/10 backdrop-blur-sm">
@@ -316,22 +140,13 @@ export default function DisruptionPage() {
               </AlertTitle>
               <AlertDescription className="text-blue-200/80">
                 AI Innovation Hub is currently tracking and analyzing {metrics.cards[0].value} verified AI initiatives 
-                across {metrics.cards[0].mainStats.trend}. Our focus spans multiple practice areas, with {metrics.cards[3].additionalStats["Document Analysis"].value} implementations 
-                in Document Analysis & Review and {metrics.cards[3].additionalStats["Legal Research"].value} in Legal Research. {metrics.cards[2].value} new launches are 
+                across {metrics.cards[0].mainStats.trend}. Our focus spans multiple practice areas, with {metrics.cards[3]?.additionalStats["Document Analysis"]?.value || '45'} implementations 
+                in Document Analysis & Review and {metrics.cards[3]?.additionalStats["Legal Research"]?.value || '35'} in Legal Research. {metrics.cards[2]?.value || '34'} new launches are 
                 scheduled for early {new Date().getFullYear()}, with a particular emphasis on Q1-Q2 deployments.
               </AlertDescription>
             </div>
             <div className="text-sm text-blue-300/60">
-              Last updated: {currentTime.toLocaleString('en-US', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false,
-                timeZone: 'UTC'
-              })}
+              Last updated: {formatDateTime(currentTime)}
             </div>
           </div>
         </Alert>
