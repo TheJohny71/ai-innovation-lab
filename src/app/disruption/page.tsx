@@ -269,8 +269,8 @@ function DisruptionPage() {
       <div className="absolute top-1/4 -left-32 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl" />
       
-      <div className="relative max-w-7xl mx-auto px-8 py-24">
-        <div className={`mb-24 max-w-5xl transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+      <div className="relative max-w-7xl mx-auto px-8 py-12">
+        <div className={`mb-12 max-w-5xl transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
           <h1 className="text-7xl font-bold mb-6 tracking-tight">
             <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 inline-block text-transparent bg-clip-text">
               Law Firm AI Disruption Index
@@ -281,13 +281,13 @@ function DisruptionPage() {
           </h1>
         </div>
 
-        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24 transition-opacity duration-1000 delay-200 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 transition-opacity duration-1000 delay-200 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
           {metrics.cards.map((card, index) => (
             <MetricCard key={index} {...card} />
           ))}
         </div>
 
-        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24 transition-opacity duration-1000 delay-400 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 transition-opacity duration-1000 delay-400 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
           <div className="bg-gray-900/40 rounded-xl p-8 border border-blue-400/10 backdrop-blur-sm">
             <h3 className="text-2xl font-medium text-white mb-8 flex items-center justify-between">
               Implementation Types
@@ -303,49 +303,49 @@ function DisruptionPage() {
                   <ProgressBar 
                     value={item.count}
                     max={Math.max(...metrics.implementationTypes.map(t => t.count))}
-                    gradient="bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400"
+                    gradient="bg-gradient-to-r from-purple-400 to-cyan-400"
                   />
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="bg-gray-900/40 rounded-xl p-8 border border-blue-400/10 backdrop-blur-sm">
-            <h3 className="text-2xl font-medium text-white mb-8 flex items-center justify-between">
-              Deployment Status
-              <span className="text-sm text-gray-400">Current state</span>
-            </h3>
-            <div className="space-y-8">
-              <div className="grid grid-cols-3 gap-6">
+          <div className="bg-gray-900/40 rounded-xl p-8 border border-blue-400/10 backdrop-blur-sm flex flex-col justify-between">
+            <div>
+              <h3 className="text-2xl font-medium text-white mb-8 flex items-center justify-between">
+                Deployment Status
+                <span className="text-sm text-gray-400">Current state</span>
+              </h3>
+              <div className="grid grid-cols-3 gap-6 mb-8">
                 {Object.entries(metrics.deploymentStatus).map(([status, count]) => (
                   <div key={status} className="text-center p-6 bg-gray-900/40 rounded-xl border border-blue-400/20">
-                    <div className="text-3xl font-bold text-blue-400 mb-2">
+                    <div className="text-4xl font-bold text-blue-400 mb-2 drop-shadow-[0_0_15px_rgba(96,165,250,0.3)]">
                       {count}
                     </div>
                     <div className="text-sm text-gray-400 capitalize">{status}</div>
                   </div>
                 ))}
               </div>
-              <button className="w-full flex items-center justify-center gap-2 text-gray-300 hover:text-white transition-colors bg-gray-900/40 rounded-xl border border-blue-400/20 p-6">
-                <span className="text-lg">Access Complete Enterprise Dataset</span>
-                <ArrowRight className="w-5 h-5" />
-              </button>
             </div>
+            <button className="w-full flex items-center justify-center gap-1 text-gray-300 hover:text-white transition-colors bg-gray-900/20 rounded-xl border border-blue-400/10 py-4 px-6 mt-auto">
+              <span>Access Complete Enterprise Dataset</span>
+              <ArrowRight className="w-4 h-4 opacity-70" />
+            </button>
           </div>
         </div>
 
         <div className={`flex flex-col items-center gap-12 transition-opacity duration-1000 delay-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
           <div className="flex justify-center gap-20">
-            <button onClick={() => window.location.href = '/welcomepage'} className="px-6 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-300">
+            <button onClick={() => window.location.href = '/welcomepage'} className="px-5 py-2 text-gray-500 hover:text-gray-300 rounded-lg transition-colors">
               Welcome
             </button>
-            <button onClick={() => window.location.href = '/solutions'} className="px-6 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-300">
+            <button onClick={() => window.location.href = '/solutions'} className="px-5 py-2 text-gray-500 hover:text-gray-300 rounded-lg transition-colors">
               Solutions
             </button>
-            <button className="px-6 py-2.5 text-white bg-gradient-to-br from-purple-500/20 to-blue-500/5 shadow-lg border border-blue-400/20 rounded-xl">
+            <button className="px-5 py-2 text-white bg-purple-900/60 rounded-lg">
               Disruption
             </button>
-            <button onClick={() => window.location.href = '/apps'} className="px-6 py-2.5 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-300">
+            <button onClick={() => window.location.href = '/apps'} className="px-5 py-2 text-gray-500 hover:text-gray-300 rounded-lg transition-colors">
               Apps
             </button>
           </div>
