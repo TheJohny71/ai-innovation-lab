@@ -52,7 +52,6 @@ interface DashboardMetrics {
     planning: number;
   };
 }
-
 // Components
 const Alert: React.FC<AlertProps> = ({ children, className = '' }) => (
   <div className={`p-6 rounded-lg border ${className}`}>
@@ -145,11 +144,12 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ value, max, gradient }) => (
   </div>
 );
 export default function DisruptionPage() {
+  // Time and user state
   const [currentTime, setCurrentTime] = useState(new Date());
   const currentUser = 'TheJohny71';
 
+  // Update time every second
   useEffect(() => {
-    // Update time every second
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
@@ -157,8 +157,21 @@ export default function DisruptionPage() {
     return () => clearInterval(timer);
   }, []);
 
-  const formattedDateTime = currentTime.toISOString().replace('T', ' ').slice(0, 19);
+  // Format time function
+  const getFormattedDateTime = () => {
+    return currentTime.toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: 'UTC'
+    });
+  };
 
+  // Metrics state
   const [metrics] = useState<DashboardMetrics>({
     cards: [
       {
@@ -257,7 +270,6 @@ export default function DisruptionPage() {
   });
 
   const totalImplementations = metrics.implementationTypes.reduce((sum, type) => sum + type.count, 0);
-
   return (
     <div className="min-h-screen bg-gray-900 p-8">
       {/* Enterprise Data Context Box */}
@@ -265,7 +277,7 @@ export default function DisruptionPage() {
         <div className="bg-blue-500/10 border border-blue-400/20 rounded-lg p-4 text-sm text-blue-200/80 flex justify-between items-center backdrop-blur-sm">
           <div className="flex items-center space-x-2">
             <Clock className="w-4 h-4" />
-            <span>Current Date and Time (UTC): {formattedDateTime}</span>
+            <span>Current Date and Time (UTC): {getFormattedDateTime()}</span>
           </div>
           <div className="flex items-center space-x-2">
             <Flag className="w-4 h-4" />
@@ -294,7 +306,6 @@ export default function DisruptionPage() {
           <ArrowRight className="ml-2 w-5 h-5" />
         </a>
       </div>
-
       {/* Message Card */}
       <div className="max-w-7xl mx-auto mb-12">
         <Alert className="border-blue-400/20 bg-blue-500/10 backdrop-blur-sm">
@@ -307,11 +318,20 @@ export default function DisruptionPage() {
                 AI Innovation Hub is currently tracking and analyzing {metrics.cards[0].value} verified AI initiatives 
                 across {metrics.cards[0].mainStats.trend}. Our focus spans multiple practice areas, with {metrics.cards[3].additionalStats["Document Analysis"].value} implementations 
                 in Document Analysis & Review and {metrics.cards[3].additionalStats["Legal Research"].value} in Legal Research. {metrics.cards[2].value} new launches are 
-                scheduled for early 2024, with a particular emphasis on Q1-Q2 deployments.
+                scheduled for early {new Date().getFullYear()}, with a particular emphasis on Q1-Q2 deployments.
               </AlertDescription>
             </div>
             <div className="text-sm text-blue-300/60">
-              Last updated: {formattedDateTime}
+              Last updated: {currentTime.toLocaleString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false,
+                timeZone: 'UTC'
+              })}
             </div>
           </div>
         </Alert>
