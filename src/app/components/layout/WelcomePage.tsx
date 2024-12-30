@@ -1,4 +1,5 @@
-// Complete WelcomePage.tsx file
+'use client';
+
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Star, Sparkles, Brain, Rocket, Bot } from 'lucide-react';
 import Link from 'next/link';
@@ -21,7 +22,11 @@ interface Star {
   isAccent: boolean;
 }
 
-const StarField = React.memo(() => {
+interface StarFieldProps {
+  mousePosition?: MousePosition;
+}
+
+const StarField: React.FC<StarFieldProps> = React.memo(() => {
   const stars: Star[] = Array.from({ length: 50 }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
@@ -58,6 +63,10 @@ const StarField = React.memo(() => {
   );
 });
 
+// Add display name
+StarField.displayName = 'StarField';
+
+// Rest of your interfaces and components remain the same
 interface Gradient {
   text: string;
   border: string;
@@ -129,6 +138,7 @@ interface Feature {
 }
 
 const WelcomePage: React.FC = () => {
+  // Rest of your WelcomePage component remains exactly the same
   const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -166,7 +176,7 @@ const WelcomePage: React.FC = () => {
     { text: 'Welcome', href: '/', current: true },
     { text: 'Solutions', href: '/solutions', current: false },
     { text: 'Disruption', href: '/disruption', current: false },
-    { text: 'Mindset', href: '/mindset', current: false }  // Updated from 'Apps' to 'Mindset'
+    { text: 'Mindset', href: '/mindset', current: false }
   ];
 
   const features: Feature[] = [
