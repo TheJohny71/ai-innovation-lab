@@ -1,39 +1,48 @@
-'use client';
-
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Star, Sparkles, Workflow, Users, LucideIcon } from 'lucide-react';
-import { debounce } from 'lodash';
+// Complete WelcomePage.tsx file
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { Star, Sparkles, Brain, Rocket, Bot } from 'lucide-react';
 import Link from 'next/link';
+import debounce from 'lodash/debounce';
+import { LucideIcon } from 'lucide-react';
 
 interface MousePosition {
   x: number;
   y: number;
 }
 
-interface StarFieldProps {
-  mousePosition: MousePosition;
+interface Star {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  opacity: number;
+  delay: number;
+  duration: number;
+  isAccent: boolean;
 }
 
-const StarField: React.FC<StarFieldProps> = React.memo(({ mousePosition }) => {
-  const stars = useMemo(() => Array(60).fill(null).map(() => ({
-    left: `${Math.random() * 100}%`,
-    top: `${Math.random() * 100}%`,
+const StarField = React.memo(() => {
+  const stars: Star[] = Array.from({ length: 50 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 2 + 1,
+    opacity: Math.random() * 0.5 + 0.3,
     delay: Math.random() * 3,
-    duration: 2 + Math.random() * 3,
-    isAccent: Math.random() > 0.7,
-    scale: 0.5 + Math.random() * 0.5
-  })), []);
+    duration: Math.random() * 3 + 2,
+    isAccent: Math.random() > 0.8
+  }));
 
   return (
-    <div className="absolute inset-0 opacity-30">
-      {stars.map((star, i) => (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      {stars.map(star => (
         <div
-          key={i}
-          className="absolute animate-pulse transition-transform duration-500 ease-cubic-bezier"
+          key={star.id}
+          className="absolute rounded-full"
           style={{
-            left: star.left,
-            top: star.top,
-            transform: `translate3d(${mousePosition.x * 20}px, ${mousePosition.y * 20}px, 0) scale(${star.scale})`,
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+            animation: `twinkle ${star.duration}s infinite`,
             animationDelay: `${star.delay}s`,
             animationDuration: `${star.duration}s`,
             transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
@@ -127,7 +136,6 @@ const WelcomePage: React.FC = () => {
     setIsLoaded(true);
   }, []);
 
-  // Create a memoized debounced function
   const debouncedSetMousePosition = useMemo(
     () =>
       debounce((x: number, y: number) => {
@@ -136,7 +144,6 @@ const WelcomePage: React.FC = () => {
     []
   );
 
-  // Update the handleMouseMove implementation
   const handleMouseMove = useCallback((e: MouseEvent) => {
     debouncedSetMousePosition(
       e.clientX / window.innerWidth,
@@ -144,7 +151,6 @@ const WelcomePage: React.FC = () => {
     );
   }, [debouncedSetMousePosition]);
 
-  // Cleanup the debounced function
   useEffect(() => {
     return () => {
       debouncedSetMousePosition.cancel();
@@ -160,7 +166,7 @@ const WelcomePage: React.FC = () => {
     { text: 'Welcome', href: '/', current: true },
     { text: 'Solutions', href: '/solutions', current: false },
     { text: 'Disruption', href: '/disruption', current: false },
-    { text: 'Apps', href: '/apps', current: false }
+    { text: 'Mindset', href: '/mindset', current: false }  // Updated from 'Apps' to 'Mindset'
   ];
 
   const features: Feature[] = [
@@ -173,68 +179,65 @@ const WelcomePage: React.FC = () => {
         border: 'border-purple-400'
       }
     },
-    { 
-      Icon: Workflow, 
-      title: 'Accelerated Workflows',
-      description: 'Streamlining operations with intelligent automation',
+    {
+      Icon: Brain,
+      title: 'Advanced Analytics',
+      description: 'Leveraging data for strategic insights and decision-making',
+      gradient: {
+        text: 'text-cyan-400',
+        border: 'border-cyan-400'
+      }
+    },
+    {
+      Icon: Rocket,
+      title: 'Process Automation',
+      description: 'Streamlining operations with intelligent workflows',
+      gradient: {
+        text: 'text-emerald-400',
+        border: 'border-emerald-400'
+      }
+    },
+    {
+      Icon: Bot,
+      title: 'AI Integration',
+      description: 'Seamlessly incorporating AI into existing systems',
       gradient: {
         text: 'text-blue-400',
         border: 'border-blue-400'
-      }
-    },
-    { 
-      Icon: Users, 
-      title: 'Talent Acceleration',
-      description: 'Empowering growth through AI-driven development',
-      gradient: {
-        text: 'text-teal-400',
-        border: 'border-teal-400',
-        marginTop: '-2px'
       }
     }
   ];
 
   return (
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.03)_0%,rgba(0,0,0,0)_50%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(56,189,248,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(56,189,248,0.01)_1px,transparent_1px)] bg-[size:64px_64px]" />
+      <StarField />
       
-      <StarField mousePosition={mousePosition} />
-      
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl" />
-      
-      <div className="relative max-w-7xl mx-auto min-h-screen flex flex-col items-center justify-start pt-24">
-        <div className={`text-center mb-24 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-          <div className="flex flex-col items-center space-y-8">
-            <h1 className="text-7xl font-bold tracking-wide bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 text-transparent bg-clip-text animate-gradient drop-shadow-2xl block">
-              AI Innovation Hub
-            </h1>
-            <div>
-              <h2 className="text-4xl font-medium tracking-wide bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 text-transparent bg-clip-text animate-gradient drop-shadow-2xl block">
-                Future-Ready Law Firm
-              </h2>
-            </div>
-            <p className="text-xl text-gray-300 drop-shadow-lg leading-relaxed whitespace-nowrap block">
-              Accelerating disruption through human-centered AI solutions
-            </p>
+      <div className="relative z-10">
+        <div className={`flex flex-col items-center gap-12 pt-32 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+          <h1 className="text-6xl font-bold text-center leading-tight">
+            AI Innovation Lab
+          </h1>
+          <p className="text-2xl text-gray-400 text-center max-w-2xl mx-auto">
+            Future-Ready Law Firm
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-8 max-w-7xl mx-auto">
+            {features.map((feature, index) => (
+              <div key={index} className="transform hover:scale-105 transition-transform">
+                <FeatureIcon
+                  Icon={feature.Icon}
+                  title={feature.title}
+                  gradient={feature.gradient}
+                />
+              </div>
+            ))}
           </div>
         </div>
-
-        <div className={`grid grid-cols-3 gap-16 px-8 max-w-7xl mx-auto mt-24 transition-opacity duration-1000 delay-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-          {features.map((feature, i) => (
-            <div key={i} className="flex justify-center">
-              <FeatureIcon {...feature} />
-            </div>
-          ))}
-        </div>
-
-        <Navigation items={navigation} />
       </div>
+
+      <Navigation items={navigation} />
     </div>
   );
 };
-
-StarField.displayName = 'StarField';
 
 export default WelcomePage;
