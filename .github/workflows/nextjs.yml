@@ -1,44 +1,44 @@
-name: Next.js CI/CD
+name: Deploy Next.js site to Pages
 
 on:
   push:
-    branches: [ "main", "update-tailwind-config" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
       
-      - name: Use Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
-          cache: 'npm'
+          node-version: "20"
+          cache: npm
           
-      - name: Clean Install Dependencies
-        run: |
-          npm cache clean --force
-          rm -rf node_modules
-          rm -rf .next
-          npm ci
-          
-      - name: Build
-        env:
-          NEXT_PUBLIC_BASE_PATH: /ai-innovation-lab
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build with Next.js
         run: npm run build
         
-      - name: Lint
-        run: npm run lint
-
+      - name: Static HTML export with Next.js
+        run: npm run export
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
@@ -53,4 +53,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v3
