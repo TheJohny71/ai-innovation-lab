@@ -6,6 +6,7 @@ const nextConfig = {
   },
   basePath: '/ai-innovation-lab',
   assetPrefix: '/ai-innovation-lab/',
+  trailingSlash: true,
 }
 
 module.exports = nextConfig
