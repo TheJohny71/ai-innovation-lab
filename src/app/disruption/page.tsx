@@ -5,6 +5,8 @@ import { Zap, Globe, Clock, Layers, Flag, ArrowRight, Scale, Star } from 'lucide
 import type { LucideIcon } from 'lucide-react';
 import { debounce } from 'lodash';
 import Link from 'next/link';
+import { Navigation } from '../components/shared/Navigation';
+import { usePathname } from 'next/navigation';
 
 interface MousePosition {
   x: number;
@@ -15,7 +17,6 @@ interface StarFieldProps {
   mousePosition: MousePosition;
 }
 
-// Define MetricCardProps first since it's used in DashboardMetrics
 interface MetricCardProps {
   icon: LucideIcon;
   title: string;
@@ -42,7 +43,6 @@ interface Metric {
   count: number;
 }
 
-// Define DashboardMetrics interface
 interface DashboardMetrics {
   cards: MetricCardProps[];
   implementationTypes: Metric[];
@@ -132,6 +132,14 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ value, max, gradient }) => (
 const DisruptionPage: React.FC = () => {
   const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
+  const pathname = usePathname();
+
+  const navigationItems = [
+    { text: 'Welcome', href: '/', current: pathname === '/' },
+    { text: 'Solutions', href: '/solutions', current: pathname === '/solutions' },
+    { text: 'Disruption', href: '/disruption', current: pathname === '/disruption' },
+    { text: 'Mindset', href: '/mindset', current: pathname === '/mindset' }
+  ];
 
   useEffect(() => {
     setIsLoaded(true);
@@ -263,7 +271,7 @@ const DisruptionPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.03)_0%,rgba(0,0,0,0)_50%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(56,189,248,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(56,189,248,0.01)_1px,transparent_1px)] bg-[size:64px_64px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(56,189,248,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(56,189,248,0.01)_1px,transparent_1px)] bg-[size:64px_64px][...]" />
       
       <StarField mousePosition={mousePosition} />
       
@@ -282,7 +290,7 @@ const DisruptionPage: React.FC = () => {
           </h1>
         </div>
 
-   <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 transition-opacity duration-1000 delay-200 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 transition-opacity duration-1000 delay-200 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
           {metrics.cards.map((card, index) => (
             <MetricCard key={index} {...card} />
           ))}
@@ -336,36 +344,11 @@ const DisruptionPage: React.FC = () => {
         </div>
 
         <div className={`flex flex-col items-center gap-12 transition-opacity duration-1000 delay-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-          <div className="flex justify-center gap-20">
-            <Link
-              href="/"
-              className="px-5 py-2 text-gray-500 hover:text-gray-300 rounded-lg transition-colors"
-            >
-              Welcome
-            </Link>
-            <Link
-              href="/solutions"
-              className="px-5 py-2 text-gray-500 hover:text-gray-300 rounded-lg transition-colors"
-            >
-              Solutions
-            </Link>
-            <Link
-              href="/disruption"
-              className="px-5 py-2 text-white bg-purple-900/60 rounded-lg"
-            >
-              Disruption
-            </Link>
-            <Link
-              href="/mindset"
-              className="px-5 py-2 text-gray-500 hover:text-gray-300 rounded-lg transition-colors"
-            >
-              Mindset
-            </Link>
-          </div>
+          <Navigation items={navigationItems} />
         </div>
       </div>
     </div>
   );
 };
 
-export default DisruptionPage;     
+export default DisruptionPage;
