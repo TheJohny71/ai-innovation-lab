@@ -1,5 +1,7 @@
 // src/app/components/shared/Navigation.tsx
+'use client';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface NavigationItem {
   text: string;
@@ -12,7 +14,7 @@ interface NavigationProps {
 }
 
 export const Navigation: React.FC<NavigationProps> = ({ items }) => (
-  <nav className="flex justify-center gap-8 fixed bottom-8 left-1/2 transform -translate-x-1/2 backdrop-blur-md bg-gray-900/30 p-2 rounded-2xl border border-gray-700/20 shadow-xl" role="navigation" aria-label="Main navigation">
+  <nav className="flex justify-center gap-8 fixed bottom-8 left-1/2 transform -translate-x-1/2 backdrop-blur-md bg-gray-900/30 p-2 rounded-2xl border border-gray-700/20 shadow-xl" role="navigation">
     {items.map(({ text, href, current }) => (
       <Link
         key={text}
