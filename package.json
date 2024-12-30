@@ -2,12 +2,14 @@
   "name": "ai-innovation-lab",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://thejohny71.github.io/ai-innovation-lab",
   "scripts": {
     "dev": "next dev",
     "build": "next build && touch out/.nojekyll",
     "start": "next start",
     "lint": "next lint",
-    "export": "next export"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d out"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -26,6 +28,7 @@
     "autoprefixer": "10.4.16",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.2.22",
+    "gh-pages": "^6.2.0",
     "postcss": "8.4.32",
     "tailwindcss": "3.4.0",
     "typescript": "5.3.3"

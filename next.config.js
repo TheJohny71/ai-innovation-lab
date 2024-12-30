@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
+  basePath: '/ai-innovation-lab',
   images: {
     unoptimized: true,
   },
-  trailingSlash: true,
+  assetPrefix: '/ai-innovation-lab/',
 }
 
 module.exports = nextConfig
