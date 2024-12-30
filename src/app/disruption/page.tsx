@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Zap, Globe, Clock, Layers, Flag, ArrowRight, Scale, Star } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { debounce } from 'lodash';
+import Link from 'next/link';
 
 interface MousePosition {
   x: number;
@@ -286,7 +287,6 @@ function DisruptionPage() {
             <MetricCard key={index} {...card} />
           ))}
         </div>
-
         <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 transition-opacity duration-1000 delay-400 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
           <div className="bg-gray-900/40 rounded-xl p-8 border border-blue-400/10 backdrop-blur-sm">
             <h3 className="text-2xl font-medium text-white mb-8 flex items-center justify-between">
@@ -336,18 +336,30 @@ function DisruptionPage() {
 
         <div className={`flex flex-col items-center gap-12 transition-opacity duration-1000 delay-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
           <div className="flex justify-center gap-20">
-            <button onClick={() => window.location.href = '/welcomepage'} className="px-5 py-2 text-gray-500 hover:text-gray-300 rounded-lg transition-colors">
+            <Link
+              href="/"
+              className="px-5 py-2 text-gray-500 hover:text-gray-300 rounded-lg transition-colors"
+            >
               Welcome
-            </button>
-            <button onClick={() => window.location.href = '/solutions'} className="px-5 py-2 text-gray-500 hover:text-gray-300 rounded-lg transition-colors">
+            </Link>
+            <Link
+              href="/solutions"
+              className="px-5 py-2 text-gray-500 hover:text-gray-300 rounded-lg transition-colors"
+            >
               Solutions
-            </button>
-            <button className="px-5 py-2 text-white bg-purple-900/60 rounded-lg">
+            </Link>
+            <Link
+              href="/disruption"
+              className="px-5 py-2 text-white bg-purple-900/60 rounded-lg"
+            >
               Disruption
-            </button>
-            <button onClick={() => window.location.href = '/apps'} className="px-5 py-2 text-gray-500 hover:text-gray-300 rounded-lg transition-colors">
-              Apps
-            </button>
+            </Link>
+            <Link
+              href="/mindset"
+              className="px-5 py-2 text-gray-500 hover:text-gray-300 rounded-lg transition-colors"
+            >
+              Mindset
+            </Link>
           </div>
         </div>
       </div>
