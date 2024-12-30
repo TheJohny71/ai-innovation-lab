@@ -2,13 +2,13 @@
   "name": "ai-innovation-lab",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://thejohny71.github.io/ai-innovation-lab",
+  "homepage": "https://thejohny71.github.io/ai-innovation-lab/",
   "scripts": {
     "dev": "next dev",
-    "build": "next build && touch out/.nojekyll",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build && touch out/.nojekyll",
     "deploy": "gh-pages -d out"
   },
   "dependencies": {
