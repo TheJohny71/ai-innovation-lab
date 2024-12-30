@@ -1,10 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',  // Enable static exports
-  basePath: '/ai-innovation-lab', // Add your repository name
+  output: 'export',
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
   images: {
-    unoptimized: true, // Required for static export
+    unoptimized: true,
   },
+  trailingSlash: true,
 }
 
 module.exports = nextConfig
