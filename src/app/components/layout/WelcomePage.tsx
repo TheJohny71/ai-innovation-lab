@@ -21,14 +21,13 @@ const StarField = React.memo(({ mousePosition }) => {
       {stars.map((star, i) => (
         <div
           key={i}
-          className="absolute animate-pulse transition-transform duration-500 ease-cubic-bezier"
+          className="absolute animate-soft-pulse transition-all-smooth"
           style={{
             left: star.left,
             top: star.top,
             transform: `translate3d(${mousePosition.x * 20}px, ${mousePosition.y * 20}px, 0) scale(${star.scale})`,
             animationDelay: `${star.delay}s`,
-            animationDuration: `${star.duration}s`,
-            transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+            animationDuration: `${star.duration}s`
           }}
         >
           <Star 
@@ -46,8 +45,8 @@ StarField.displayName = 'StarField';
 const FeatureIcon = ({ Icon, title, gradient }) => {
   const [firstWord, ...restWords] = title.split(' ');
   return (
-    <div className="flex flex-col items-center justify-center gap-4 group h-32">
-      <div className={`rounded-2xl p-6 border border-opacity-20 bg-gray-900/40 group-hover:bg-gray-900/60 transition-colors ${gradient.border} shadow-lg flex items-center justify-center`}>
+    <div className="flex flex-col items-center justify-center gap-4 group h-32 card-hover">
+      <div className={`rounded-2xl p-6 border border-opacity-20 glass-effect ${gradient.border} shadow-lg flex items-center justify-center`}>
         <div className="flex items-center justify-center w-12 h-12">
           <Icon className={`w-full h-full ${gradient.text}`} strokeWidth={1.5} />
         </div>
@@ -123,7 +122,7 @@ const WelcomePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
+    <div className="min-h-screen bg-slate-900 text-white relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.03)_0%,rgba(0,0,0,0)_50%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(56,189,248,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(56,189,248,0.01)_1px,transparent_1px)] bg-[size:64px_64px]" />
       
@@ -133,11 +132,11 @@ const WelcomePage = () => {
       <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl" />
       
       <div className="relative max-w-5xl mx-auto min-h-screen flex flex-col items-center justify-start pt-24">
-        <div className={`text-center mb-24 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-          <h1 className="text-6xl font-bold mb-4 tracking-wide bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 inline-block text-transparent bg-clip-text animate-gradient drop-shadow-2xl">
+        <div className={`text-center mb-24 animate-fade-in ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+          <h1 className="text-6xl font-bold mb-4 tracking-wide gradient-text animate-gradient drop-shadow-2xl">
             Future-Ready Law Firm
           </h1>
-          <h2 className="text-5xl font-bold mb-8 tracking-wide bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 inline-block text-transparent bg-clip-text animate-gradient drop-shadow-2xl">
+          <h2 className="text-5xl font-bold mb-8 tracking-wide gradient-text animate-gradient drop-shadow-2xl">
             AI Innovation Hub
           </h2>
           <p className="text-gray-300 text-2xl mt-4 mb-16 max-w-3xl mx-auto drop-shadow-lg">
@@ -145,7 +144,7 @@ const WelcomePage = () => {
           </p>
         </div>
 
-        <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-20 px-8 max-w-5xl mx-auto mt-32 transition-opacity duration-1000 delay-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-20 px-8 max-w-5xl mx-auto mt-32 animate-slide-in ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
           {features.map((feature, i) => (
             <div key={i} className="flex justify-center">
               <FeatureIcon {...feature} />
