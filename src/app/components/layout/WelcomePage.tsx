@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Star, Sparkles, Brain as Workflow, Users } from 'lucide-react';
 import { debounce } from 'lodash';
@@ -12,29 +13,39 @@ interface MousePosition {
 }
 
 interface StarFieldProps {
-  mousePosition: MousePosition; // Added proper typing here
+  mousePosition: MousePosition;
 }
 
-interface Star {
-  id: number;
-  x: number;
-  y: number;
-  size: number;
-  opacity: number;
-  delay: number;
-  duration: number;
-  isAccent: boolean;
+interface Gradient {
+  text: string;
+  border: string;
+  marginTop?: string;
+}
+
+interface FeatureIconProps {
+  Icon: React.ElementType;
+  title: string;
+  gradient: Gradient;
+}
+
+interface Feature {
+  Icon: React.ElementType;
+  title: string;
+  description: string;
+  gradient: Gradient;
 }
 
 const StarField: React.FC<StarFieldProps> = React.memo(({ mousePosition }) => {
-  const stars = useMemo(() => Array(60).fill().map(() => ({
-    left: `${Math.random() * 100}%`,
-    top: `${Math.random() * 100}%`,
-    delay: Math.random() * 3,
-    duration: 2 + Math.random() * 3,
-    isAccent: Math.random() > 0.7,
-    scale: 0.5 + Math.random() * 0.5
-  })), []);
+  const stars = useMemo(() => {
+    return Array.from({ length: 60 }).map(() => ({
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      delay: Math.random() * 3,
+      duration: 2 + Math.random() * 3,
+      isAccent: Math.random() > 0.7,
+      scale: 0.5 + Math.random() * 0.5
+    }));
+  }, []);
 
   return (
     <div className="absolute inset-0 opacity-30">
@@ -62,18 +73,6 @@ const StarField: React.FC<StarFieldProps> = React.memo(({ mousePosition }) => {
 
 StarField.displayName = 'StarField';
 
-interface Gradient {
-  text: string;
-  border: string;
-  marginTop?: string;
-}
-
-interface FeatureIconProps {
-  Icon: LucideIcon;
-  title: string;
-  gradient: Gradient;
-}
-
 const FeatureIcon: React.FC<FeatureIconProps> = ({ Icon, title, gradient }) => {
   const [firstWord, ...restWords] = title.split(' ');
   return (
@@ -90,13 +89,6 @@ const FeatureIcon: React.FC<FeatureIconProps> = ({ Icon, title, gradient }) => {
     </div>
   );
 };
-
-interface Feature {
-  Icon: LucideIcon;
-  title: string;
-  description: string;
-  gradient: Gradient;
-}
 
 const WelcomePage: React.FC = () => {
   const pathname = usePathname();
