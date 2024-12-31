@@ -155,15 +155,15 @@ const WelcomePage: React.FC = () => {
       
       <div className="relative max-w-5xl mx-auto min-h-screen flex flex-col items-center justify-start pt-24">
         <div className={`text-center mb-24 animate-fade-in ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-          <h1 className="text-6xl font-bold mb-4 tracking-wide gradient-text animate-gradient drop-shadow-2xl">
-            Future-Ready Law Firm
-          </h1>
-          <h2 className="text-5xl font-bold mb-8 tracking-wide gradient-text animate-gradient drop-shadow-2xl">
-            AI Innovation Hub
-          </h2>
-          <p className="text-gray-300 text-2xl mt-4 mb-16 max-w-3xl mx-auto drop-shadow-lg">
-            Accelerating disruption through human-centered AI solutions
-          </p>
+           <h1 className="text-7xl font-bold mb-4 tracking-wide gradient-text animate-gradient drop-shadow-2xl">
+              AI Innovation Lab
+            </h1>
+            <h2 className="text-5xl font-bold mb-8 tracking-wide gradient-text animate-gradient drop-shadow-2xl">
+              Future-Ready Law Firm
+            </h2>
+            <p className="text-gray-300 text-2xl mt-4 mb-16 max-w-3xl mx-auto drop-shadow-lg">
+              Accelerating Disruption Through Human-Centered AI Solutions
+            </p>
         </div>
 
         <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-20 px-8 max-w-5xl mx-auto mt-32 animate-slide-in ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
