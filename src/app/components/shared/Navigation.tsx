@@ -2,15 +2,26 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export const Navigation = () => {
+export interface NavigationItem {
+  text: string;
+  href: string;
+}
+
+export interface NavigationProps {
+  items?: NavigationItem[];
+}
+
+export const Navigation: React.FC<NavigationProps> = ({ items }) => {
   const pathname = usePathname();
   
-  const navigationItems = [
+  const defaultItems = [
     { text: 'Welcome', href: '/' },
     { text: 'Solutions', href: '/solutions' },
     { text: 'Disruption', href: '/disruption' },
     { text: 'Mindset', href: '/mindset' }
   ];
+
+  const navigationItems = items || defaultItems;
 
   return (
     <nav 
