@@ -6,7 +6,27 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Navigation } from '../shared/Navigation';
 
-const StarField = React.memo(({ mousePosition }) => {
+interface MousePosition {
+  x: number;
+  y: number;
+}
+
+interface StarFieldProps {
+  mousePosition: MousePosition; // Added proper typing here
+}
+
+interface Star {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  opacity: number;
+  delay: number;
+  duration: number;
+  isAccent: boolean;
+}
+
+const StarField: React.FC<StarFieldProps> = React.memo(({ mousePosition }) => {
   const stars = useMemo(() => Array(60).fill().map(() => ({
     left: `${Math.random() * 100}%`,
     top: `${Math.random() * 100}%`,
@@ -42,7 +62,19 @@ const StarField = React.memo(({ mousePosition }) => {
 
 StarField.displayName = 'StarField';
 
-const FeatureIcon = ({ Icon, title, gradient }) => {
+interface Gradient {
+  text: string;
+  border: string;
+  marginTop?: string;
+}
+
+interface FeatureIconProps {
+  Icon: LucideIcon;
+  title: string;
+  gradient: Gradient;
+}
+
+const FeatureIcon: React.FC<FeatureIconProps> = ({ Icon, title, gradient }) => {
   const [firstWord, ...restWords] = title.split(' ');
   return (
     <div className="flex flex-col items-center justify-center gap-4 group h-32 card-hover">
@@ -59,9 +91,16 @@ const FeatureIcon = ({ Icon, title, gradient }) => {
   );
 };
 
-const WelcomePage = () => {
+interface Feature {
+  Icon: LucideIcon;
+  title: string;
+  description: string;
+  gradient: Gradient;
+}
+
+const WelcomePage: React.FC = () => {
   const pathname = usePathname();
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -69,7 +108,7 @@ const WelcomePage = () => {
   }, []);
 
   const handleMouseMove = useCallback(
-    debounce((e) => {
+    debounce((e: MouseEvent) => {
       setMousePosition({
         x: e.clientX / window.innerWidth,
         y: e.clientY / window.innerHeight,
@@ -90,7 +129,7 @@ const WelcomePage = () => {
     { text: 'Mindset', href: '/mindset', current: pathname === '/mindset' }
   ];
 
-  const features = [
+  const features: Feature[] = [
     { 
       Icon: Sparkles, 
       title: 'Enhanced Client Service',
