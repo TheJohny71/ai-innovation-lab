@@ -1,22 +1,20 @@
 import './globals.css';
-import type { Metadata, Viewport } from 'next'; // Add Viewport import
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
+import { Navigation } from './components/shared/Navigation';
 
-// Optimize font loading with subset and display settings
 const inter = Inter({ 
   subsets: ['latin'],
-  display: 'swap', // Ensures text remains visible during webfont load
-  variable: '--font-inter', // Enable CSS variable for font
+  display: 'swap',
+  variable: '--font-inter',
 });
 
-// Separate viewport configuration
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#0f172a', // Moved from metadata to viewport
+  themeColor: '#0f172a',
 };
 
-// Enhanced metadata without viewport and themeColor
 export const metadata: Metadata = {
   title: 'AI Innovation Lab',
   description: 'Transforming legal practice through AI innovation',
@@ -34,10 +32,10 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body className={`${inter.className} antialiased`}>
         <main className="min-h-screen bg-slate-900 text-white relative overflow-x-hidden">
-          {/* Add scroll smoothing and better text rendering */}
           <div className="smooth-scroll">
             {children}
           </div>
+          <Navigation />
         </main>
       </body>
     </html>
