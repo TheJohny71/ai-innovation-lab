@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Star, Sparkles, Brain as Workflow, Users } from 'lucide-react';
 import { debounce } from 'lodash';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Navigation } from '../shared/Navigation';
 
@@ -91,7 +90,6 @@ const FeatureIcon: React.FC<FeatureIconProps> = ({ Icon, title, gradient }) => {
 };
 
 const WelcomePage: React.FC = () => {
-  const pathname = usePathname();
   const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -113,13 +111,6 @@ const WelcomePage: React.FC = () => {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [handleMouseMove]);
-
-  const navigationItems = [
-    { text: 'Welcome', href: '/', current: pathname === '/' },
-    { text: 'Solutions', href: '/solutions', current: pathname === '/solutions' },
-    { text: 'Disruption', href: '/disruption', current: pathname === '/disruption' },
-    { text: 'Mindset', href: '/mindset', current: pathname === '/mindset' }
-  ];
 
   const features: Feature[] = [
     { 
@@ -183,7 +174,7 @@ const WelcomePage: React.FC = () => {
           ))}
         </div>
 
-        <Navigation items={navigationItems} />
+        <Navigation />
       </div>
     </div>
   );
